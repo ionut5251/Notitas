@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Especial</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Mejoras para móvil */
+        html, body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+            touch-action: manipulation;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1c258b; /* Azul profundo que contrasta bien con el rojo */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        #wrapper {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+        }
+        
+        /* EL SOBRE (CONTENEDOR) - Color rojo elegante */
+        .envelope {
+            width: 200px;
+            height: 100px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #b92424, #ff5252);
+            box-shadow: 
+                0 0 1px rgba(0,0,0,0.3),
+                0 4px 20px rgba(0,0,0,0.25),
+                0 15px 40px rgba(255, 82, 82, 0.3),
+                0 0 80px rgba(255, 82, 82, 0.15);
+            position: relative;
+            perspective: 800px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .envelope:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 1px rgba(0,0,0,0.3),
+                0 6px 25px rgba(0,0,0,0.3),
+                0 20px 50px rgba(255, 82, 82, 0.35),
+                0 0 100px rgba(255, 82, 82, 0.2);
+        }
+        
+        .envelope:active {
+            transform: translateY(0);
+        }
+        
+        .envelope:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border: 0 solid rgba(0,0,0,0.15);
+            border-width: 45px 100px;
+            border-top-color: transparent;
+            z-index: 2;
+        }
+        
+        .envelope .flap {
+            position: absolute;
+            width: 100%;
+            height: 0;
+            border: 0 solid transparent;
+            border-width: 50px 100px;
+        }
+        
+        .envelope .flap.front {
+            border-left-color: #ff8a8a;
+            border-right-color: #ff8a8a;
+            border-bottom-color: #e74c3c;
+            z-index: 3;
+        }
+        
+        .envelope .flap.front:after {
+            content: '';
+            width: 100%;
+            height: 0;
+            position: absolute;
+            left: -100px;
+            bottom: -50px;
+            border: 0 solid transparent;
+            border-width: 49px 100px;
+            border-bottom-color: #ff8a8a;
+        }
+        
+        .envelope .flap.top {
+            border-top-width: 55px;
+            border-top-color: #e74c3c;
+            z-index: 3;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            transform-origin: top;
+            transform-style: preserve-3d;
+        }
+        
+        .envelope.open .flap.top {
+            animation-name: flip;
+        }
+        
+        .envelope.closing-step4 .flap.top {
+            animation-name: flip-reverse;
+            animation-delay: 0s;
+        }
+        
+        .envelope .flap.top:after {
+            content: '';
+            position: absolute;
+            left: -100px;
+            top: -55px;
+            width: 100%;
+            height: 0;
+            border: 0 solid transparent;
+            border-width: 54px 100px;
+            border-top-color: #ff8a8a;
+        }
+        
+        .envelope.letter-open .flap.top {
+            transform: rotateX(180deg);
+            z-index: 1 !important; 
+        }
+        
+        .envelope.closing-step1 .flap.top,
+        .envelope.closing-step2 .flap.top,
+        .envelope.closing-step3 .flap.top {
+            transform: rotateX(180deg);
+            z-index: 1 !important;
+        }
+        
+        /* LA CARTA */
+        .envelope .letter {
+            position: absolute;
+            width: 194px;
+            height: 84px;
+            background: linear-gradient(to bottom, #fff9f9, #fff);
+            top: 8px;
+            left: 3px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            z-index: 1;
+            animation-duration: 2s;
+            animation-delay: 1.5s;
+            animation-fill-mode: forwards;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(255, 107, 107, 0.1);
+            border-radius: 1px;
+        }
+
+        /* --- ESTILOS DEL TEXTO --- */
+        .letter-content {
+            font-family: 'Georgia', serif;
+            font-size: 15px;
+            color: #5d4037;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            pointer-events: none;
+            padding: 10px;
+            z-index: 10;
+            position: relative;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* --- EMOJIS POSICIONADOS EN EL SOBRE (NO EN LA CARTA) --- */
+        .emoji-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .emoji-top, .emoji-bottom {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            z-index: 15;
+            pointer-events: none;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+        }
+
+        .emoji-top {
+            top: -35px;
+        }
+
+        .emoji-bottom {
+            bottom: -35px;
+        }
+
+        /* Mostrar texto y emojis simultáneamente */
+        .envelope.show-text .letter-content,
+        .envelope.show-text .emoji-top,
+        .envelope.show-text .emoji-bottom {
+            opacity: 1;
+        }
+        
+        .envelope.show-text .emoji-top {
+            animation: floatUp 2s ease-in-out infinite;
+        }
+        
+        .envelope.show-text .emoji-bottom {
+            animation: floatDown 2s ease-in-out infinite;
+        }
+        
+        /* ANIMACIONES DE LA CARTA */
+        .envelope.open .letter {
+            animation-name: remove;
+        }
+        
+        .envelope.closing-step3 .letter {
+            animation-name: return;
+            animation-delay: 0s;
+            animation-duration: 1.5s;
+            z-index: 1;
+        }
+        
+        .envelope.letter-open .letter {
+            top: 8px;
+            z-index: 4 !important;
+            animation: none !important;
+        }
+        
+        .envelope.closing-step1 .letter,
+        .envelope.closing-step2 .letter {
+            z-index: 4 !important;
+        }
+        
+        /* PLIEGUES DE LA CARTA */
+        .envelope .letter:before,
+        .envelope .letter:after {
+            content: '';
+            position: absolute;
+            width: 192px;
+            height: 75%;
+            left: -1px;
+            background: linear-gradient(to bottom, #fff9f9, #fff);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            transform-origin: top;
+            transform-style: preserve-3d;
+        }
+        
+        .envelope .letter:before {
+            z-index: 2;
+            transform: rotateX(10deg);
+        }
+        
+        .envelope.open .letter:before {
+            animation-name: fold-up;
+            animation-delay: 3.5s;
+        }
+        
+        .envelope.closing-step2 .letter:before {
+            animation-name: fold-up-reverse;
+            animation-delay: 0s;
+        }
+        
+        .envelope.letter-open .letter:before {
+            transform: rotateX(140deg);
+            animation: none !important;
+        }
+        
+        .envelope.closing-step1 .letter:before {
+            transform: rotateX(140deg) !important;
+            animation: none !important;
+        }
+        
+        .envelope .letter:after {
+            z-index: 2;
+            transform-origin: bottom;
+            transform: rotateX(-5deg);
+            bottom: 0;
+        }
+        
+        .envelope.open .letter:after {
+            animation-name: fold-down;
+            animation-delay: 4.5s;
+        }
+        
+        .envelope.closing-step1 .letter:after {
+            animation-name: fold-down-reverse;
+            animation-delay: 0s;
+        }
+        
+        .envelope.letter-open .letter:after {
+            transform: rotateX(-140deg);
+            animation: none !important;
+        }
+        
+        /* --- KEYFRAMES --- */
+        @keyframes flip { 
+            100% { transform: rotateX(180deg); z-index: 1; } 
+        }
+        
+        @keyframes flip-reverse { 
+            0% { transform: rotateX(180deg); z-index: 1; } 
+            100% { transform: rotateX(0deg); z-index: 3; } 
+        }
+        
+        @keyframes remove { 
+            0% { top: 8px; z-index: 1; } 
+            50% { top: -120px; z-index: 4; } 
+            100% { top: 8px; z-index: 4; } 
+        }
+        
+        @keyframes return { 
+            0% { top: 8px; z-index: 4; } 
+            40% { top: -120px; z-index: 4; } 
+            41% { top: -120px; z-index: 1; } 
+            100% { top: 8px; z-index: 1; } 
+        }
+        
+        @keyframes fold-up { 
+            0% { transform: rotateX(10deg); } 
+            100% { transform: rotateX(140deg); } 
+        }
+        
+        @keyframes fold-up-reverse { 
+            0% { transform: rotateX(140deg); } 
+            100% { transform: rotateX(10deg); } 
+        }
+        
+        @keyframes fold-down { 
+            0% { transform: rotateX(-5deg); } 
+            100% { transform: rotateX(-140deg); } 
+        }
+        
+        @keyframes fold-down-reverse { 
+            0% { transform: rotateX(-140deg); } 
+            100% { transform: rotateX(-5deg); } 
+        }
+        
+        @keyframes floatUp {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+        
+        @keyframes floatDown {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(5px); }
+        }
+        
+        /* Media queries para móvil */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                background: #1a237e;
+            }
+            
+            .envelope {
+                transform: scale(1.3);
+                margin: 0 auto;
+            }
+            
+            .envelope:hover {
+                transform: scale(1.3) translateY(-2px);
+            }
+            
+            .envelope:active {
+                transform: scale(1.3) translateY(0);
+            }
+            
+            .letter-content {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            .emoji-top, .emoji-bottom {
+                font-size: 22px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .envelope {
+                transform: scale(1.2);
+            }
+            
+            .envelope:hover {
+                transform: scale(1.2) translateY(-2px);
+            }
+            
+            .envelope:active {
+                transform: scale(1.2) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="envelope">
+            <div class="flap front"></div>
+            <div class="flap top"></div>
+            <div class="letter">
+                <div class="letter-content" id="texto-carta"></div>
+            </div>
+            <!-- Contenedor para los emojis, fuera de la carta pero dentro del sobre -->
+            <div class="emoji-container">
+                <div class="emoji-top" id="emoji-top"></div>
+                <div class="emoji-bottom" id="emoji-bottom"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let sobreAbierto = false;
+            let animando = false;
+            let animacionAbiertaCompleta = false;
+            
+            // --- LÓGICA DE TEXTOS ALEATORIOS CON EMOJIS ASIGNADOS ---
+            const textosConEmojis = [
+                {
+                    texto: "Keep shining!",
+                    emoji: "✨"  // Estrella
+                },
+                {
+                    texto: "Hoy te ves increíble!", 
+                    emoji: "😍"  // Ojitos de corazón
+                },
+                {
+                    texto: "Sonrie!",
+                    emoji: "😊"  // Sonrisa
+                },
+                {
+                    texto: "Tienes una sonrisa especial!",
+                    emoji: "🥰"  // Cara sonriente con corazones
+                },
+                {
+                    texto: "Beautiful smile!",
+                    emoji: "🤗"  // Abrazo
+                }
+            ];
+            
+            // Copia de la lista para ir quitando los que ya salieron
+            let textosDisponibles = [...textosConEmojis];
+
+            function obtenerTextoYEmojiAleatorio() {
+                // Si nos quedamos sin textos, reiniciamos la lista
+                if (textosDisponibles.length === 0) {
+                    textosDisponibles = [...textosConEmojis];
+                }
+                
+                // Elegimos un índice al azar de los disponibles
+                const indice = Math.floor(Math.random() * textosDisponibles.length);
+                // Extraemos el texto y emoji de la lista (sacándolo con splice)
+                const textoElegido = textosDisponibles.splice(indice, 1)[0];
+                
+                return textoElegido;
+            }
+            
+            function abrirSobre() {
+                if (animando) return;
+                animando = true;
+                animacionAbiertaCompleta = false;
+                
+                // Obtenemos texto y emoji aleatorio
+                const contenido = obtenerTextoYEmojiAleatorio();
+                
+                // Inyectamos el nuevo texto antes de empezar la animación
+                $('#texto-carta').text(contenido.texto);
+                
+                // Asignamos el emoji correspondiente tanto arriba como abajo
+                $('#emoji-top').text(contenido.emoji);
+                $('#emoji-bottom').text(contenido.emoji);
+                
+                $('.envelope').removeClass('letter-open closing-step1 closing-step2 closing-step3 closing-step4 show-text');
+                $('.envelope').addClass('open');
+                sobreAbierto = true;
+                
+                setTimeout(function() {
+                    $('.envelope').removeClass('open').addClass('letter-open');
+                    
+                    setTimeout(function() {
+                        // Al añadir show-text, tanto el texto como los emojis aparecerán (CSS opacity)
+                        $('.envelope').addClass('show-text');
+                        animacionAbiertaCompleta = true;
+                        animando = false;
+                    }, 500);
+                }, 6000);
+            }
+            
+            function iniciarCierre() {
+                if (animando || !sobreAbierto) return;
+                animando = true;
+                
+                // Al quitar show-text, el texto y los emojis desaparecen inmediatamente con la transición
+                $('.envelope').removeClass('show-text');
+                
+                setTimeout(function() {
+                    if (!animacionAbiertaCompleta) {
+                        $('.envelope').removeClass('open').addClass('letter-open');
+                    }
+                    
+                    $('.envelope').removeClass('letter-open').addClass('closing-step1');
+                    
+                    setTimeout(function() {
+                        $('.envelope').removeClass('closing-step1').addClass('closing-step2');
+                        
+                        setTimeout(function() {
+                            $('.envelope').removeClass('closing-step2').addClass('closing-step3');
+                            
+                            setTimeout(function() {
+                                $('.envelope').removeClass('closing-step3').addClass('closing-step4');
+                                sobreAbierto = false;
+                                animacionAbiertaCompleta = false;
+                                
+                                setTimeout(function() {
+                                    $('.envelope').removeClass('closing-step4');
+                                    // Limpiamos el texto y emojis al terminar de cerrar para el siguiente ciclo
+                                    $('#texto-carta').text('');
+                                    $('#emoji-top').text('');
+                                    $('#emoji-bottom').text('');
+                                    animando = false;
+                                }, 1000);
+                            }, 1500);
+                        }, 1000);
+                    }, 1000);
+                }, 500);
+            }
+            
+            $('.envelope').click(function() {
+                if (sobreAbierto) iniciarCierre();
+                else abrirSobre();
+            });
+            
+            $('.envelope').on('touchstart', function(e) {
+                e.preventDefault();
+                if (sobreAbierto) iniciarCierre();
+                else abrirSobre();
+            });
+        });
+    </script>
+</body>
+</html>
