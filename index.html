@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Especial</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Importar fuente Dancing Script de Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importar fuente Pacifico de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -177,22 +177,22 @@
             border-radius: 1px;
         }
 
-        /* --- ESTILOS DEL TEXTO MEJORADO --- */
+        /* --- ESTILOS DEL TEXTO CON FUENTE PACIFICO --- */
         .letter-content {
-            font-family: 'Dancing Script', cursive; /* Fuente cursiva elegante */
-            font-size: 16px; /* Un poco más grande */
+            font-family: 'Pacifico', cursive; /* Fuente Pacifico moderna y redondeada */
+            font-size: 15px; /* Tamaño óptimo para Pacifico */
             color: #5d4037;
             opacity: 0;
             transition: opacity 0.5s ease;
             text-align: center;
             pointer-events: none;
-            padding: 10px;
+            padding: 8px 10px;
             z-index: 10;
             position: relative;
-            line-height: 1.5; /* Más espaciado entre líneas */
-            font-weight: 500; /* Peso medio para mejor legibilidad */
+            line-height: 1.4; /* Espaciado entre líneas */
             text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1); /* Sombra sutil */
-            letter-spacing: 0.3px; /* Espaciado entre letras */
+            letter-spacing: 0.2px; /* Espaciado entre letras */
+            font-weight: normal; /* Pacifico no tiene pesos diferentes */
         }
 
         /* --- EMOJIS POSICIONADOS EN EL SOBRE (NO EN LA CARTA) --- */
@@ -401,8 +401,8 @@
             }
             
             .letter-content {
-                font-size: 20px; /* Ajustado para móvil */
-                padding: 8px;
+                font-size: 16px; /* Un poco más grande en móvil */
+                padding: 6px 8px;
             }
             
             .emoji-top, .emoji-bottom {
@@ -424,7 +424,7 @@
             }
             
             .letter-content {
-                font-size: 14px; /* Un poco más pequeño para pantallas muy pequeñas */
+                font-size: 15px; /* Tamaño óptimo para pantallas muy pequeñas */
             }
         }
     </style>
@@ -455,23 +455,23 @@
             const textosConEmojis = [
                 {
                     texto: "Keep shining!",
-                    emoji: "✨"  // Estrella
+                    emoji: "✨" 
                 },
                 {
                     texto: "Hoy te ves increíble!", 
-                    emoji: "😍"  // Ojitos de corazón
+                    emoji: "😍" 
                 },
                 {
                     texto: "Sonrie!",
-                    emoji: "😊"  // Sonrisa
+                    emoji: "😊" 
                 },
                 {
                     texto: "Tienes una sonrisa especial!",
-                    emoji: "🥰"  // Cara sonriente con corazones
+                    emoji: "🥰" 
                 },
                 {
                     texto: "Beautiful smile!",
-                    emoji: "🤗"  // Abrazo
+                    emoji: "🤗" 
                 },
                 {
                     texto: "Eres mi pensamiento favorito.",
