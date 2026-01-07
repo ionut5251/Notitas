@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Especial</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Importar fuente Dancing Script de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -175,10 +177,10 @@
             border-radius: 1px;
         }
 
-        /* --- ESTILOS DEL TEXTO --- */
+        /* --- ESTILOS DEL TEXTO MEJORADO --- */
         .letter-content {
-            font-family: 'Georgia', serif;
-            font-size: 15px;
+            font-family: 'Dancing Script', cursive; /* Fuente cursiva elegante */
+            font-size: 16px; /* Un poco más grande */
             color: #5d4037;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -187,8 +189,10 @@
             padding: 10px;
             z-index: 10;
             position: relative;
-            line-height: 1.4;
-            font-weight: 500;
+            line-height: 1.5; /* Más espaciado entre líneas */
+            font-weight: 500; /* Peso medio para mejor legibilidad */
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1); /* Sombra sutil */
+            letter-spacing: 0.3px; /* Espaciado entre letras */
         }
 
         /* --- EMOJIS POSICIONADOS EN EL SOBRE (NO EN LA CARTA) --- */
@@ -397,7 +401,7 @@
             }
             
             .letter-content {
-                font-size: 14px;
+                font-size: 20px; /* Ajustado para móvil */
                 padding: 8px;
             }
             
@@ -417,6 +421,10 @@
             
             .envelope:active {
                 transform: scale(1.2) translateY(0);
+            }
+            
+            .letter-content {
+                font-size: 14px; /* Un poco más pequeño para pantallas muy pequeñas */
             }
         }
     </style>
@@ -464,6 +472,54 @@
                 {
                     texto: "Beautiful smile!",
                     emoji: "🤗"  // Abrazo
+                },
+                {
+                    texto: "Eres mi pensamiento favorito.",
+                    emoji: "💭"  
+                },
+                {
+                    texto: "Haces que todo sea más bonito.",
+                    emoji: "🌈"  
+                },
+                {
+                    texto: "Mi lugar favorito eres tú!",
+                    emoji: "⭐️"  
+                },
+                {
+                    texto: "¡Tú puedes con todo hoy!",
+                    emoji: "💪🏼"  
+                },
+                {
+                    texto: "Que nada te quite esa sonrisa!",
+                    emoji: "💙"  
+                },
+                {
+                    texto: "Cualquier día se vuelve más bonito cuando te veo sonreír.",
+                    emoji: "🌸" 
+                },
+                {
+                    texto: "Tu sonrisa es mi luz.",
+                    emoji: "🌟" 
+                },
+                {
+                    texto: "Tu esencia alegra todo.",
+                    emoji: "🌷" 
+                },
+                {
+                    texto: "Me encantas exactamente como eres!",
+                    emoji: "💖" 
+                },
+                {
+                    texto: "You are my favorite smile!",
+                    emoji: "😘" 
+                },
+                {
+                    texto: "Es imposible no sonreír contigo.",
+                    emoji: "😌"  
+                },
+                {
+                    texto: "Eres más increíble de lo que crees!",
+                    emoji: "🚀" 
                 }
             ];
             
