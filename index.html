@@ -7,6 +7,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Importar fuente Pacifico de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Iconos para el botón de música -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -32,6 +34,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
         }
         
         #wrapper {
@@ -40,6 +43,74 @@
             margin: 0 auto;
             position: relative;
             text-align: center;
+        }
+        
+        /* Botón de música */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 82, 82, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 2px solid white;
+        }
+        
+        .music-control:hover {
+            background: rgba(255, 82, 82, 1);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .music-control i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .music-control.playing i {
+            color: #ffeb3b;
+        }
+        
+        .music-control.pulsing {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 82, 82, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+        }
+        
+        /* Notificación de música */
+        .music-notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            max-width: 200px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+        }
+        
+        .music-notification.show {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         /* EL SOBRE (CONTENEDOR) - Color rojo elegante */
@@ -441,6 +512,26 @@
             .envelope.show-text .emoji-bottom {
                 animation: floatDownMobile 2s ease-in-out infinite;
             }
+            
+            /* Ajustes para el botón de música en móvil */
+            .music-control {
+                bottom: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .music-control i {
+                font-size: 20px;
+            }
+            
+            .music-notification {
+                bottom: 70px;
+                right: 15px;
+                font-size: 12px;
+                max-width: 180px;
+                padding: 8px 12px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -472,6 +563,26 @@
             .emoji-bottom {
                 bottom: -25px;
             }
+            
+            /* Ajustes para pantallas muy pequeñas */
+            .music-control {
+                bottom: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .music-control i {
+                font-size: 18px;
+            }
+            
+            .music-notification {
+                bottom: 60px;
+                right: 10px;
+                font-size: 11px;
+                max-width: 160px;
+                padding: 6px 10px;
+            }
         }
     </style>
 </head>
@@ -490,6 +601,22 @@
             </div>
         </div>
     </div>
+    
+    <!-- Botón de control de música -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+    
+    <!-- Notificación de música -->
+    <div class="music-notification" id="musicNotification">
+        Música activada. ¡Disfruta de la experiencia!
+    </div>
+    
+    <!-- Audio para la música de fondo con TU CANCIÓN -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="https://ionut5251.github.io/Notitas/cancion.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
 
     <script>
         $(document).ready(function() {
@@ -665,6 +792,112 @@
                 e.preventDefault();
                 if (sobreAbierto) iniciarCierre();
                 else abrirSobre();
+            });
+            
+            // --- LÓGICA DE MÚSICA DE FONDO ---
+            const musicPlayer = document.getElementById('backgroundMusic');
+            const musicControl = document.getElementById('musicControl');
+            const musicNotification = document.getElementById('musicNotification');
+            
+            let musicEnabled = false;
+            let userInteracted = false;
+            
+            // Mostrar notificación
+            function showNotification(message) {
+                musicNotification.textContent = message;
+                musicNotification.classList.add('show');
+                
+                setTimeout(function() {
+                    musicNotification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Intentar reproducir música (requiere interacción del usuario)
+            function playMusic() {
+                if (!userInteracted) {
+                    showNotification("Toca el botón de música para activarla");
+                    return;
+                }
+                
+                musicPlayer.volume = 0.5; // Volumen al 50%
+                musicPlayer.play().then(() => {
+                    musicEnabled = true;
+                    musicControl.classList.add('playing');
+                    musicControl.classList.add('pulsing');
+                    showNotification("Música activada. ¡Disfruta de la experiencia!");
+                }).catch(error => {
+                    console.log("Error al reproducir música:", error);
+                    showNotification("No se pudo reproducir la música. Intenta nuevamente.");
+                });
+            }
+            
+            // Pausar música
+            function pauseMusic() {
+                musicPlayer.pause();
+                musicEnabled = false;
+                musicControl.classList.remove('playing');
+                musicControl.classList.remove('pulsing');
+                showNotification("Música pausada");
+            }
+            
+            // Controlador de clic en el botón de música
+            musicControl.addEventListener('click', function() {
+                userInteracted = true;
+                
+                if (musicEnabled) {
+                    pauseMusic();
+                } else {
+                    playMusic();
+                }
+            });
+            
+            // Control táctil para móviles
+            musicControl.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                userInteracted = true;
+                
+                if (musicEnabled) {
+                    pauseMusic();
+                } else {
+                    playMusic();
+                }
+            });
+            
+            // Mostrar notificación de bienvenida después de cargar
+            setTimeout(function() {
+                showNotification("¿Quieres música de fondo? Toca el botón rojo abajo");
+                
+                // Hacer que el botón parpadee para llamar la atención
+                setTimeout(function() {
+                    musicControl.classList.add('pulsing');
+                    
+                    // Quitar el parpadeo después de 10 segundos
+                    setTimeout(function() {
+                        if (!musicEnabled) {
+                            musicControl.classList.remove('pulsing');
+                        }
+                    }, 10000);
+                }, 1000);
+            }, 2000);
+            
+            // Intentar reproducción automática después de la primera interacción con el sobre
+            $('.envelope').on('click touchstart', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    // Después de abrir el sobre, sugerir música
+                    setTimeout(function() {
+                        if (!musicEnabled) {
+                            showNotification("¿Te gustaría añadir música de fondo?");
+                            musicControl.classList.add('pulsing');
+                            
+                            setTimeout(function() {
+                                if (!musicEnabled) {
+                                    musicControl.classList.remove('pulsing');
+                                }
+                            }, 5000);
+                        }
+                    }, 8000); // 8 segundos después de abrir
+                }
             });
         });
     </script>
