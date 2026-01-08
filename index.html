@@ -801,6 +801,7 @@
             
             let musicEnabled = false;
             let userInteracted = false;
+            let wasPlayingBeforeHidden = false;
             
             // Mostrar notificación
             function showNotification(message) {
@@ -837,7 +838,6 @@
                 musicEnabled = false;
                 musicControl.classList.remove('playing');
                 musicControl.classList.remove('pulsing');
-                showNotification("Música pausada");
             }
             
             // Controlador de clic en el botón de música
@@ -846,6 +846,7 @@
                 
                 if (musicEnabled) {
                     pauseMusic();
+                    showNotification("Música pausada");
                 } else {
                     playMusic();
                 }
@@ -858,7 +859,42 @@
                 
                 if (musicEnabled) {
                     pauseMusic();
+                    showNotification("Música pausada");
                 } else {
+                    playMusic();
+                }
+            });
+            
+            // --- DETECCIÓN DE VISIBILIDAD DE LA PÁGINA ---
+            // Pausar música cuando la página no está visible (cambio de pestaña o minimizada)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // La página ya no es visible
+                    if (musicEnabled && !musicPlayer.paused) {
+                        wasPlayingBeforeHidden = true;
+                        pauseMusic();
+                    }
+                } else {
+                    // La página es visible nuevamente
+                    if (wasPlayingBeforeHidden && userInteracted) {
+                        wasPlayingBeforeHidden = false;
+                        playMusic();
+                    }
+                }
+            });
+            
+            // También detectar cuando la ventana pierde el foco
+            window.addEventListener('blur', function() {
+                if (musicEnabled && !musicPlayer.paused) {
+                    wasPlayingBeforeHidden = true;
+                    pauseMusic();
+                }
+            });
+            
+            // Restaurar cuando la ventana recupera el foco
+            window.addEventListener('focus', function() {
+                if (wasPlayingBeforeHidden && userInteracted) {
+                    wasPlayingBeforeHidden = false;
                     playMusic();
                 }
             });
