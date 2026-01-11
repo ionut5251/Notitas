@@ -106,17 +106,21 @@
         
         /* Reproductor de música avanzado - MÁS PEQUEÑO */
         .music-player {
-            position: relative;
-            margin: 10px auto 0; /* REDUCIDO de 30px a 10px */
+            position: fixed; /* Cambiado de 'relative' a 'fixed' */
+            bottom: 80px; /* Posicionado desde la parte inferior */
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0; /* Eliminamos el margen superior */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 12px; /* REDUCIDO de 15px a 12px */
-            padding: 10px; /* REDUCIDO de 15px a 10px */
+            border-radius: 12px;
+            padding: 10px;
             width: 90%;
-            max-width: 300px; /* REDUCIDO de 350px a 300px */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* REDUCIDO de 8px a 4px */
+            max-width: 300px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: none; /* OCULTO POR DEFECTO */
+            z-index: 100; /* Asegurar que esté por encima */
         }
         
         .song-selector {
@@ -675,11 +679,24 @@
             
             /* Ajustes ESPECIALES para el reproductor en móvil - MÁS COMPACTO */
             .music-player {
-                margin: 5px auto 0; /* MÁS REDUCIDO: de 20px a 5px */
-                padding: 8px; /* MÁS REDUCIDO: de 12px a 8px */
+                position: fixed; /* Mantener fixed en móvil */
+                bottom: 70px; /* Un poco más arriba en móvil */
+                left: 50%;
+                transform: translateX(-50%);
+                margin: 0; /* Sin margen */
+                padding: 8px;
                 width: 95%;
-                max-width: 280px; /* MÁS REDUCIDO: de 300px a 280px */
-                border-radius: 10px; /* MÁS REDUCIDO: de 12px a 10px */
+                max-width: 280px;
+                border-radius: 10px;
+            }
+            
+            /* Ajustar la notificación para que no se solape */
+            .music-notification {
+                bottom: 120px; /* Más arriba para no solapar con reproductor */
+                right: 15px;
+                font-size: 12px;
+                max-width: 180px;
+                padding: 8px 12px;
             }
             
             .song-selector {
