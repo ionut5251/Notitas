@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Especial</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZZPNBD62R"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZZPNBD62R', {
+            'page_title': 'Sobre Especial',
+            'page_location': window.location.href,
+            'page_path': window.location.pathname
+        });
+    </script>
+    <!-- Fin Google Analytics -->
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Importar fuente Pacifico de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
@@ -45,7 +60,7 @@
             text-align: center;
         }
         
-        /* Botón de música */
+        /* Botón de música flotante */
         .music-control {
             position: fixed;
             bottom: 20px;
@@ -87,6 +102,130 @@
             0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(255, 82, 82, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+        }
+        
+        /* Reproductor de música avanzado */
+        .music-player {
+            position: relative;
+            margin: 30px auto 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .song-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .song-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 82, 82, 0.8);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .song-btn:hover {
+            background: rgba(255, 82, 82, 1);
+            transform: translateY(-2px);
+        }
+        
+        .song-btn.active {
+            background: #ffeb3b;
+            color: #1c258b;
+            box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .play-pause-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 82, 82, 0.9);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .play-pause-btn:hover {
+            background: rgba(255, 82, 82, 1);
+            transform: scale(1.1);
+        }
+        
+        .song-info {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .song-title {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .song-artist {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .volume-control i {
+            color: white;
+            font-size: 16px;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff5252;
+            cursor: pointer;
         }
         
         /* Notificación de música */
@@ -312,6 +451,35 @@
             animation: floatDown 2s ease-in-out infinite;
         }
         
+        /* Efectos especiales para mensajes seguidos */
+        .effects-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .heart-effect, .kiss-effect {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10000;
+        }
+        
+        .heart-effect {
+            color: #ff4081;
+            animation: floatHearts 4s ease-in-out forwards;
+        }
+        
+        .kiss-effect {
+            color: #ff5252;
+            animation: floatKisses 3s ease-in-out forwards;
+        }
+        
         /* ANIMACIONES DE LA CARTA */
         .envelope.open .letter {
             animation-name: remove;
@@ -450,6 +618,36 @@
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(5px); }
         }
+        
+        @keyframes floatHearts {
+            0% { 
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            20% {
+                opacity: 0.8;
+                transform: translateY(-20px) scale(1);
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+        
+        @keyframes floatKisses {
+            0% { 
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            30% {
+                opacity: 0.9;
+                transform: translateY(-30px) scale(1.2) rotate(10deg);
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(-120px) scale(0.8) rotate(-10deg);
+            }
+        }
 
         /* Animaciones específicas para móvil */
         @keyframes floatUpMobile {
@@ -532,6 +730,23 @@
                 max-width: 180px;
                 padding: 8px 12px;
             }
+            
+            /* Ajustes para el reproductor en móvil */
+            .music-player {
+                margin: 20px auto 0;
+                padding: 12px;
+                width: 95%;
+            }
+            
+            .song-selector {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .song-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -583,6 +798,16 @@
                 max-width: 160px;
                 padding: 6px 10px;
             }
+            
+            .music-player {
+                margin: 15px auto 0;
+                padding: 10px;
+            }
+            
+            .song-btn {
+                font-size: 12px;
+                padding: 8px;
+            }
         }
     </style>
 </head>
@@ -600,9 +825,43 @@
                 <div class="emoji-bottom" id="emoji-bottom"></div>
             </div>
         </div>
+        
+        <!-- Reproductor de música -->
+        <div class="music-player" id="musicPlayer">
+            <div class="song-selector">
+                <button class="song-btn" data-song="1">
+                    <i class="fas fa-music"></i> Sonríe
+                </button>
+                <button class="song-btn" data-song="2">
+                    <i class="fas fa-heart"></i> Love
+                </button>
+                <button class="song-btn" data-song="3">
+                    <i class="fas fa-star"></i> I Adore You
+                </button>
+            </div>
+            
+            <div class="player-controls">
+                <button class="play-pause-btn" id="playPauseBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="song-info">
+                    <div class="song-title" id="currentSongTitle">Selecciona una canción</div>
+                    <div class="song-artist" id="currentSongArtist">Tu música especial</div>
+                </div>
+            </div>
+            
+            <div class="volume-control">
+                <i class="fas fa-volume-down"></i>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+                <i class="fas fa-volume-up"></i>
+            </div>
+        </div>
     </div>
     
-    <!-- Botón de control de música -->
+    <!-- Contenedor para efectos especiales -->
+    <div class="effects-container" id="effectsContainer"></div>
+    
+    <!-- Botón de control de música flotante -->
     <div class="music-control" id="musicControl">
         <i class="fas fa-music"></i>
     </div>
@@ -612,10 +871,15 @@
         Música activada. ¡Disfruta de la experiencia!
     </div>
     
-    <!-- Audio para la música de fondo con TU CANCIÓN -->
-    <audio id="backgroundMusic" loop preload="auto">
+    <!-- Elementos de audio para las canciones -->
+    <audio id="song1" preload="auto">
         <source src="https://ionut5251.github.io/Notitas/cancion.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="song2" preload="auto">
+        <source src="https://ionut5251.github.io/Notitas/cancion2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="song3" preload="auto">
+        <source src="https://ionut5251.github.io/Notitas/cancionadore.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -623,6 +887,8 @@
             let sobreAbierto = false;
             let animando = false;
             let animacionAbiertaCompleta = false;
+            let mensajesSeguidos = 0;
+            let ultimoMensajeTiempo = 0;
             
             // --- LÓGICA DE TEXTOS ALEATORIOS CON EMOJIS ASIGNADOS ---
             const textosConEmojis = [
@@ -693,6 +959,18 @@
                 {
                     texto: "Eres más increíble de lo que crees!",
                     emoji: "🚀" 
+                },
+                {
+                    texto: "Tu risa es mi melodía favorita.",
+                    emoji: "🎵"
+                },
+                {
+                    texto: "Contigo todo tiene más color.",
+                    emoji: "🎨"
+                },
+                {
+                    texto: "Eres la razón de mi sonrisa hoy.",
+                    emoji: "😊"
                 }
             ];
             
@@ -713,6 +991,66 @@
                 return textoElegido;
             }
             
+            // Función para crear efectos especiales
+            function crearEfecto(tipo) {
+                const container = $('#effectsContainer');
+                const efecto = document.createElement('div');
+                
+                if (tipo === 'heart') {
+                    efecto.className = 'heart-effect';
+                    efecto.innerHTML = '❤️';
+                    efecto.style.left = Math.random() * 90 + 5 + '%';
+                    efecto.style.fontSize = (Math.random() * 20 + 25) + 'px';
+                } else if (tipo === 'kiss') {
+                    efecto.className = 'kiss-effect';
+                    efecto.innerHTML = '💋';
+                    efecto.style.left = Math.random() * 90 + 5 + '%';
+                    efecto.style.fontSize = (Math.random() * 15 + 30) + 'px';
+                }
+                
+                efecto.style.top = '80%';
+                container.append(efecto);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    efecto.remove();
+                }, tipo === 'heart' ? 4000 : 3000);
+            }
+            
+            // Función para verificar y activar efectos por mensajes seguidos
+            function verificarEfectosEspeciales() {
+                const ahora = Date.now();
+                
+                // Si pasaron menos de 10 segundos desde el último mensaje
+                if (ahora - ultimoMensajeTiempo < 10000) {
+                    mensajesSeguidos++;
+                    
+                    console.log(`📊 Mensajes seguidos: ${mensajesSeguidos}`);
+                    
+                    // Efecto después de 2, 6, 10, etc. mensajes seguidos (cada 4)
+                    if (mensajesSeguidos % 4 === 2) {
+                        console.log('💖 Activando efecto de corazones');
+                        // Crear múltiples corazones
+                        for (let i = 0; i < 8; i++) {
+                            setTimeout(() => crearEfecto('heart'), i * 200);
+                        }
+                    }
+                    // Efecto después de 4, 8, 12, etc. mensajes seguidos (cada 4)
+                    else if (mensajesSeguidos % 4 === 0 && mensajesSeguidos > 0) {
+                        console.log('💋 Activando efecto de besos');
+                        // Crear múltiples besos
+                        for (let i = 0; i < 12; i++) {
+                            setTimeout(() => crearEfecto('kiss'), i * 150);
+                        }
+                    }
+                } else {
+                    // Reiniciar contador si pasó mucho tiempo
+                    mensajesSeguidos = 0;
+                }
+                
+                ultimoMensajeTiempo = ahora;
+            }
+            
             function abrirSobre() {
                 if (animando) return;
                 animando = true;
@@ -728,8 +1066,20 @@
                 $('#emoji-top').text(contenido.emoji);
                 $('#emoji-bottom').text(contenido.emoji);
                 
-                // Registrar la visita con el mensaje que se mostró
-                registrarVisita(contenido.texto, contenido.emoji);
+                // Verificar efectos especiales por mensajes seguidos
+                verificarEfectosEspeciales();
+                
+                // Registrar evento en Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'sobre_abierto', {
+                        'event_category': 'interaccion',
+                        'event_label': contenido.texto,
+                        'value': 1
+                    });
+                }
+                
+                // Registrar la visita localmente
+                registrarVisitaLocal(contenido.texto, contenido.emoji);
                 
                 $('.envelope').removeClass('letter-open closing-step1 closing-step2 closing-step3 closing-step4 show-text');
                 $('.envelope').addClass('open');
@@ -797,16 +1147,121 @@
                 else abrirSobre();
             });
             
-            // --- LÓGICA DE MÚSICA DE FONDO ---
-            const musicPlayer = document.getElementById('backgroundMusic');
-            const musicControl = document.getElementById('musicControl');
+            // ==============================================
+            // SISTEMA DE MÚSICA AVANZADO (CORREGIDO)
+            // ==============================================
+            
+            // Elementos del reproductor
+            const songs = [
+                {
+                    id: 1,
+                    title: "Sonríe",
+                    artist: "Música para ti",
+                    element: document.getElementById('song1'),
+                    button: $('.song-btn[data-song="1"]')
+                },
+                {
+                    id: 2,
+                    title: "Love",
+                    artist: "Canción romántica",
+                    element: document.getElementById('song2'),
+                    button: $('.song-btn[data-song="2"]')
+                },
+                {
+                    id: 3,
+                    title: "I Adore You",
+                    artist: "Para sonreír",
+                    element: document.getElementById('song3'),
+                    button: $('.song-btn[data-song="3"]')
+                }
+            ];
+            
+            let currentSongIndex = 0;
+            let isPlaying = false;
+            let wasPlayingBeforeHidden = false;
             const musicNotification = document.getElementById('musicNotification');
             
-            let musicEnabled = false;
-            let userInteracted = false;
-            let wasPlayingBeforeHidden = false;
+            // Función para cambiar canción
+            function changeSong(songIndex) {
+                // Pausar canción actual
+                songs[currentSongIndex].element.pause();
+                songs[currentSongIndex].button.removeClass('active');
+                
+                // Cambiar a nueva canción
+                currentSongIndex = songIndex;
+                const currentSong = songs[currentSongIndex];
+                
+                // Actualizar interfaz
+                currentSong.button.addClass('active');
+                $('#currentSongTitle').text(currentSong.title);
+                $('#currentSongArtist').text(currentSong.artist);
+                
+                // Registrar evento en Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'cancion_cambiada', {
+                        'event_category': 'musica',
+                        'event_label': currentSong.title,
+                        'value': songIndex
+                    });
+                }
+                
+                // Si estaba reproduciendo, iniciar nueva canción
+                if (isPlaying) {
+                    currentSong.element.currentTime = 0;
+                    currentSong.element.play().then(() => {
+                        // Actualizar icono de play/pause a pause
+                        $('#playPauseBtn i').removeClass('fa-play').addClass('fa-pause');
+                    }).catch(error => {
+                        console.log("Error al reproducir:", error);
+                    });
+                }
+                
+                // Guardar preferencia
+                localStorage.setItem('selectedSong', currentSongIndex);
+            }
             
-            // Mostrar notificación
+            // Función para play/pause (CORREGIDA)
+            function togglePlayPause() {
+                const currentSong = songs[currentSongIndex];
+                const playPauseIcon = $('#playPauseBtn i');
+                
+                if (isPlaying) {
+                    currentSong.element.pause();
+                    playPauseIcon.removeClass('fa-pause').addClass('fa-play');
+                    showNotification("Música pausada");
+                    
+                    // Registrar evento en Google Analytics
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'musica_pausada', {
+                            'event_category': 'musica',
+                            'event_label': currentSong.title
+                        });
+                    }
+                } else {
+                    currentSong.element.play().then(() => {
+                        playPauseIcon.removeClass('fa-play').addClass('fa-pause');
+                        showNotification(`Reproduciendo: ${currentSong.title}`);
+                        
+                        // Registrar evento en Google Analytics
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'musica_iniciada', {
+                                'event_category': 'musica',
+                                'event_label': currentSong.title
+                            });
+                        }
+                    }).catch(error => {
+                        console.log("Error al reproducir:", error);
+                        showNotification("Haz clic en el sobre primero para activar la música");
+                        // Si hay error, mantener icono de play
+                        isPlaying = false;
+                    });
+                }
+                
+                isPlaying = !isPlaying;
+                localStorage.setItem('musicPlaying', isPlaying);
+            }
+            
+            // Función para mostrar notificación
             function showNotification(message) {
                 musicNotification.textContent = message;
                 musicNotification.classList.add('show');
@@ -816,135 +1271,154 @@
                 }, 3000);
             }
             
-            // Intentar reproducir música (requiere interacción del usuario)
-            function playMusic() {
-                if (!userInteracted) {
-                    showNotification("Toca el botón de música para activarla");
-                    return;
+            // Función para actualizar volumen
+            function updateVolume(value) {
+                const volume = value / 100;
+                songs.forEach(song => {
+                    song.element.volume = volume;
+                });
+                localStorage.setItem('musicVolume', value);
+            }
+            
+            // Inicializar reproductor
+            function initializePlayer() {
+                // Cargar preferencias
+                const savedSong = localStorage.getItem('selectedSong');
+                const savedVolume = localStorage.getItem('musicVolume');
+                const savedPlaying = localStorage.getItem('musicPlaying');
+                
+                if (savedSong !== null) {
+                    changeSong(parseInt(savedSong));
+                } else {
+                    songs[currentSongIndex].button.addClass('active');
+                    $('#currentSongTitle').text(songs[currentSongIndex].title);
+                    $('#currentSongArtist').text(songs[currentSongIndex].artist);
                 }
                 
-                musicPlayer.volume = 0.5; // Volumen al 50%
-                musicPlayer.play().then(() => {
-                    musicEnabled = true;
-                    musicControl.classList.add('playing');
-                    musicControl.classList.add('pulsing');
-                    showNotification("Música activada. ¡Disfruta de la experiencia!");
-                }).catch(error => {
-                    console.log("Error al reproducir música:", error);
-                    showNotification("No se pudo reproducir la música. Intenta nuevamente.");
+                if (savedVolume !== null) {
+                    $('#volumeSlider').val(savedVolume);
+                    updateVolume(savedVolume);
+                } else {
+                    updateVolume(50);
+                }
+                
+                if (savedPlaying === 'true') {
+                    isPlaying = true;
+                    $('#playPauseBtn i').removeClass('fa-play').addClass('fa-pause');
+                    // Intentar reproducir la canción
+                    setTimeout(() => {
+                        songs[currentSongIndex].element.play().catch(e => {
+                            console.log("No se pudo reproducir automáticamente:", e);
+                            isPlaying = false;
+                            $('#playPauseBtn i').removeClass('fa-pause').addClass('fa-play');
+                        });
+                    }, 500);
+                }
+                
+                // Configurar eventos de fin de canción
+                songs.forEach((song, index) => {
+                    song.element.addEventListener('ended', () => {
+                        if (isPlaying) {
+                            // Repetir la misma canción (loop)
+                            song.element.currentTime = 0;
+                            song.element.play();
+                        }
+                    });
+                    
+                    // Actualizar estado cuando se pausa manualmente
+                    song.element.addEventListener('pause', () => {
+                        // Solo cambiar icono si no estamos cambiando de canción
+                        if (isPlaying && currentSongIndex === index) {
+                            isPlaying = false;
+                            $('#playPauseBtn i').removeClass('fa-pause').addClass('fa-play');
+                        }
+                    });
+                    
+                    // Actualizar estado cuando se reanuda
+                    song.element.addEventListener('play', () => {
+                        if (!isPlaying && currentSongIndex === index) {
+                            isPlaying = true;
+                            $('#playPauseBtn i').removeClass('fa-play').addClass('fa-pause');
+                        }
+                    });
                 });
             }
             
-            // Pausar música
-            function pauseMusic() {
-                musicPlayer.pause();
-                musicEnabled = false;
-                musicControl.classList.remove('playing');
-                musicControl.classList.remove('pulsing');
-            }
+            // Event listeners para controles de música
+            $('.song-btn').click(function() {
+                const songIndex = parseInt($(this).data('song')) - 1;
+                changeSong(songIndex);
+            });
             
-            // Controlador de clic en el botón de música
-            musicControl.addEventListener('click', function() {
-                userInteracted = true;
+            $('#playPauseBtn').click(function() {
+                togglePlayPause();
+            });
+            
+            $('#volumeSlider').on('input', function() {
+                updateVolume($(this).val());
+            });
+            
+            // Botón de música flotante (alterna mostrar/ocultar reproductor)
+            $('#musicControl').click(function() {
+                $('#musicPlayer').slideToggle(300);
+                $(this).toggleClass('pulsing');
                 
-                if (musicEnabled) {
-                    pauseMusic();
-                    showNotification("Música pausada");
-                } else {
-                    playMusic();
+                // Registrar evento en Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'reproductor_toggle', {
+                        'event_category': 'interfaz'
+                    });
                 }
             });
             
             // Control táctil para móviles
-            musicControl.addEventListener('touchstart', function(e) {
+            $('#musicControl').on('touchstart', function(e) {
                 e.preventDefault();
-                userInteracted = true;
-                
-                if (musicEnabled) {
-                    pauseMusic();
-                    showNotification("Música pausada");
-                } else {
-                    playMusic();
-                }
+                $('#musicPlayer').slideToggle(300);
+                $(this).toggleClass('pulsing');
             });
             
             // --- DETECCIÓN DE VISIBILIDAD DE LA PÁGINA ---
-            // Pausar música cuando la página no está visible (cambio de pestaña o minimizada)
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
                     // La página ya no es visible
-                    if (musicEnabled && !musicPlayer.paused) {
+                    if (isPlaying) {
                         wasPlayingBeforeHidden = true;
-                        pauseMusic();
+                        songs[currentSongIndex].element.pause();
                     }
                 } else {
                     // La página es visible nuevamente
-                    if (wasPlayingBeforeHidden && userInteracted) {
+                    if (wasPlayingBeforeHidden) {
                         wasPlayingBeforeHidden = false;
-                        playMusic();
+                        if (isPlaying) {
+                            songs[currentSongIndex].element.play().catch(console.error);
+                        }
                     }
                 }
             });
             
-            // También detectar cuando la ventana pierde el foco
+            // Detectar cuando la ventana pierde el foco
             window.addEventListener('blur', function() {
-                if (musicEnabled && !musicPlayer.paused) {
+                if (isPlaying) {
                     wasPlayingBeforeHidden = true;
-                    pauseMusic();
+                    songs[currentSongIndex].element.pause();
                 }
             });
             
             // Restaurar cuando la ventana recupera el foco
             window.addEventListener('focus', function() {
-                if (wasPlayingBeforeHidden && userInteracted) {
+                if (wasPlayingBeforeHidden && isPlaying) {
                     wasPlayingBeforeHidden = false;
-                    playMusic();
-                }
-            });
-            
-            // Mostrar notificación de bienvenida después de cargar
-            setTimeout(function() {
-                showNotification("¿Quieres música de fondo? Toca el botón rojo abajo");
-                
-                // Hacer que el botón parpadee para llamar la atención
-                setTimeout(function() {
-                    musicControl.classList.add('pulsing');
-                    
-                    // Quitar el parpadeo después de 10 segundos
-                    setTimeout(function() {
-                        if (!musicEnabled) {
-                            musicControl.classList.remove('pulsing');
-                        }
-                    }, 10000);
-                }, 1000);
-            }, 2000);
-            
-            // Intentar reproducción automática después de la primera interacción con el sobre
-            $('.envelope').on('click touchstart', function() {
-                if (!userInteracted) {
-                    userInteracted = true;
-                    // Después de abrir el sobre, sugerir música
-                    setTimeout(function() {
-                        if (!musicEnabled) {
-                            showNotification("¿Te gustaría añadir música de fondo?");
-                            musicControl.classList.add('pulsing');
-                            
-                            setTimeout(function() {
-                                if (!musicEnabled) {
-                                    musicControl.classList.remove('pulsing');
-                                }
-                            }, 5000);
-                        }
-                    }, 8000); // 8 segundos después de abrir
+                    songs[currentSongIndex].element.play().catch(console.error);
                 }
             });
             
             // ==============================================
-            // SISTEMA DE REGISTRO DE VISITAS MEJORADO
+            // SISTEMA DE REGISTRO LOCAL DE VISITAS
             // ==============================================
             
-            // Función para registrar visita
-            function registrarVisita(mensaje, emoji) {
+            // Función para registrar visita localmente
+            async function registrarVisitaLocal(mensaje, emoji) {
                 try {
                     // Crear objeto de visita
                     const visita = {
@@ -954,138 +1428,186 @@
                         mensaje: mensaje,
                         emoji: emoji,
                         dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? 'móvil' : 'desktop',
-                        navegador: navigator.userAgent.substring(0, 100) // Solo primeros 100 caracteres
+                        navegador: navigator.userAgent.substring(0, 100),
+                        ip: await obtenerIP()
                     };
                     
-                    console.log('📝 Visita registrada:', visita);
+                    console.log('📝 Registrando visita local:', visita);
                     
                     // Guardar en localStorage
-                    guardarVisitaLocal(visita);
+                    guardarVisitaLocalStorage(visita);
                     
-                    // Mostrar resumen automáticamente en consola
-                    mostrarResumenVisitas();
+                    // Registrar evento en Google Analytics
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'mensaje_visto', {
+                            'event_category': 'contenido',
+                            'event_label': mensaje.substring(0, 30),
+                            'value': 1
+                        });
+                    }
                     
                 } catch (error) {
-                    console.error('Error al registrar visita:', error);
+                    console.error('Error al registrar visita local:', error);
                 }
             }
             
-            // Función para guardar visita localmente
-            function guardarVisitaLocal(visita) {
+            // Función para obtener IP aproximada
+            async function obtenerIP() {
                 try {
-                    // Obtener historial existente
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    return data.ip;
+                } catch (error) {
+                    return 'Desconocida';
+                }
+            }
+            
+            // Función para guardar visita en localStorage
+            function guardarVisitaLocalStorage(visita) {
+                try {
                     let historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                    
-                    // Añadir nueva visita
                     historial.push(visita);
                     
-                    // Mantener solo las últimas 100 visitas
+                    // Limitar a 100 registros para no saturar
                     if (historial.length > 100) {
                         historial = historial.slice(-100);
                     }
                     
-                    // Guardar en localStorage
                     localStorage.setItem('historial_visitas', JSON.stringify(historial));
                     localStorage.setItem('ultima_visita', JSON.stringify(visita));
+                    
+                    // Mostrar resumen en consola
+                    mostrarResumenLocal();
                     
                 } catch (error) {
                     console.error('Error al guardar visita local:', error);
                 }
             }
             
-            // Función para mostrar resumen COMPLETO de visitas
-            function mostrarResumenVisitas() {
-                try {
-                    const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                    
-                    if (historial.length === 0) {
-                        console.log('📊 No hay visitas registradas aún.');
-                        return;
-                    }
-                    
-                    console.clear();
-                    console.log('%c📊 ===== RESUMEN COMPLETO DE VISITAS =====', 'color: #ff5252; font-size: 16px; font-weight: bold');
-                    console.log(`%cTOTAL VISITAS: ${historial.length}`, 'color: #4CAF50; font-size: 14px;');
-                    
-                    // Mostrar visitas de HOY
+            // Función para mostrar resumen local
+            function mostrarResumenLocal() {
+                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                if (historial.length > 0) {
+                    console.log(`📊 Visitando local: ${historial.length} registradas`);
                     const hoy = new Date().toLocaleDateString('es-ES');
-                    const visitasHoy = historial.filter(v => v.fecha === hoy);
-                    console.log(`%c📅 Hoy (${hoy}): ${visitasHoy.length} visita(s)`, 'color: #2196F3;');
+                    const hoyCount = historial.filter(v => v.fecha === hoy).length;
+                    console.log(`📅 Hoy (${hoy}): ${hoyCount} visita(s)`);
                     
-                    // Mostrar TODAS las visitas en orden cronológico inverso (más recientes primero)
-                    console.log('\n%c📋 TODAS LAS VISITAS (más recientes primero):', 'color: #9C27B0; font-weight: bold');
+                    // Mostrar últimos 5 mensajes
+                    console.log('📝 Últimos mensajes:');
+                    historial.slice(-5).reverse().forEach((v, i) => {
+                        console.log(`   ${v.hora}: "${v.mensaje}" ${v.emoji}`);
+                    });
+                }
+            }
+            
+            // Función para exportar datos locales
+            function exportarDatosLocales() {
+                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                const datos = {
+                    exportado: new Date().toISOString(),
+                    total: historial.length,
+                    visitas: historial
+                };
+                
+                const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `visitas-local-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                console.log('📁 Datos locales exportados');
+                showNotification("Datos exportados a archivo JSON");
+            }
+            
+            // Función para ver estadísticas
+            function verEstadisticas() {
+                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                
+                console.clear();
+                console.log('%c📊 ===== ESTADÍSTICAS LOCALES =====', 'color: #ff5252; font-size: 16px; font-weight: bold');
+                console.log(`%cTotal mensajes vistos: ${historial.length}`, 'color: #4CAF50');
+                
+                if (historial.length > 0) {
+                    // Contar por fecha
+                    const porFecha = {};
+                    historial.forEach(v => {
+                        porFecha[v.fecha] = (porFecha[v.fecha] || 0) + 1;
+                    });
                     
-                    historial.slice().reverse().forEach((visita, index) => {
+                    console.log('\n%c📅 VISITAS POR FECHA:', 'color: #9C27B0; font-weight: bold');
+                    Object.entries(porFecha).forEach(([fecha, count]) => {
+                        console.log(`   ${fecha}: ${count} mensaje(s)`);
+                    });
+                    
+                    // Mostrar últimos 15 mensajes
+                    console.log('\n%c📋 ÚLTIMOS MENSAJES:', 'color: #FF9800; font-weight: bold');
+                    historial.slice(-15).reverse().forEach((visita, index) => {
                         const num = historial.length - index;
-                        console.log(`\n%c${num}. ${visita.fecha} - ${visita.hora}`, 'color: #FF9800;');
+                        console.log(`\n${num}. ${visita.fecha} - ${visita.hora}`);
                         console.log(`   💌 "${visita.mensaje}" ${visita.emoji}`);
                         console.log(`   📱 ${visita.dispositivo}`);
-                        console.log(`   🌐 ${visita.navegador.split(' ')[0]}`); // Solo el nombre del navegador
-                    });
-                    
-                    // Resumen por día
-                    console.log('\n%c📈 RESUMEN POR DÍA:', 'color: #E91E63; font-weight: bold');
-                    const resumenDias = {};
-                    historial.forEach(visita => {
-                        if (resumenDias[visita.fecha]) {
-                            resumenDias[visita.fecha]++;
-                        } else {
-                            resumenDias[visita.fecha] = 1;
-                        }
-                    });
-                    
-                    // Ordenar días (más reciente primero)
-                    Object.keys(resumenDias)
-                        .sort((a, b) => new Date(b.split('/').reverse().join('-')) - new Date(a.split('/').reverse().join('-')))
-                        .forEach(fecha => {
-                            const barras = '█'.repeat(Math.min(resumenDias[fecha], 20));
-                            console.log(`   ${fecha}: ${barras} ${resumenDias[fecha]}`);
-                        });
-                    
-                    console.log('\n%c============================================', 'color: #ff5252; font-weight: bold');
-                    
-                } catch (error) {
-                    console.error('Error al mostrar resumen:', error);
-                }
-            }
-            
-            // Función para mostrar estadísticas rápidas (sin alert, solo consola)
-            function mostrarEstadisticasRapidas() {
-                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                const hoy = new Date().toLocaleDateString('es-ES');
-                const visitasHoy = historial.filter(v => v.fecha === hoy);
-                
-                console.log(`📊 Hoy has usado la app ${visitasHoy.length} vez/veces`);
-                console.log(`📈 Total de visitas registradas: ${historial.length}`);
-                
-                if (visitasHoy.length > 0) {
-                    console.log('\n📅 Tus visitas de hoy:');
-                    visitasHoy.slice().reverse().forEach((visita, index) => {
-                        console.log(`   ${index + 1}. ${visita.hora} - "${visita.mensaje}" ${visita.emoji}`);
+                        console.log(`   🌐 ${visita.navegador.split(' ')[0]}`);
                     });
                 }
+                
+                console.log('\n%c====================================', 'color: #ff5252; font-weight: bold');
+                console.log('📝 Usa exportarDatosLocales() para exportar');
+                
+                showNotification("Estadísticas mostradas en consola");
             }
             
-            // Registrar cuando la página se carga por primera vez
-            setTimeout(function() {
+            // Inicializar todo
+            setTimeout(async function() {
+                // Inicializar reproductor
+                initializePlayer();
+                
+                // Registrar primera visita
                 if (!sessionStorage.getItem('visita_registrada')) {
-                    registrarVisita('Página cargada', '📱');
+                    await registrarVisitaLocal('Página cargada', '📱');
                     sessionStorage.setItem('visita_registrada', 'true');
+                    
+                    // Registrar página cargada en Google Analytics
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'page_load', {
+                            'event_category': 'navegacion',
+                            'value': 1
+                        });
+                    }
                 }
                 
-                // Mostrar instrucciones en consola
-                console.log('%c🔍 INSTRUCCIONES PARA VER ESTADÍSTICAS:', 'color: #4CAF50; font-weight: bold');
-                console.log('1. Abre la consola (F12 → Console)');
-                console.log('2. Cada vez que abras un mensaje, se mostrará automáticamente el resumen');
-                console.log('3. O escribe en la consola: mostrarResumenVisitas()');
-                console.log('4. Para un resumen rápido: mostrarEstadisticasRapidas()');
-                console.log('\n📝 Las visitas se guardan en localStorage de tu navegador.');
+                // Mostrar notificación
+                showNotification("¡Descubre mensajes especiales!");
+                $('#musicControl').addClass('pulsing');
                 
-            }, 1000);
-            
-            // Hacer las funciones accesibles desde la consola
-            window.mostrarResumenVisitas = mostrarResumenVisitas;
-            window.mostrarEstadisticasRapidas = mostrarEstadisticasRapidas;
+                // Ocultar reproductor por defecto en móvil
+                if (window.innerWidth <= 768) {
+                    $('#musicPlayer').hide();
+                }
+                
+                setTimeout(function() {
+                    $('#musicControl').removeClass('pulsing');
+                }, 10000);
+                
+                // Instrucciones en consola
+                console.log('🎵 REPRODUCTOR DE MÚSICA - 3 canciones');
+                console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
+                console.log('• Cada mensaje se guarda en localStorage');
+                console.log('• Para ver estadísticas: verEstadisticas()');
+                console.log('• Para exportar locales: exportarDatosLocales()');
+                console.log('📈 Google Analytics activo para seguimiento');
+                console.log('💖 Efectos especiales cada 2 y 4 mensajes seguidos');
+                
+                // Hacer funciones accesibles
+                window.verEstadisticas = verEstadisticas;
+                window.exportarDatosLocales = exportarDatosLocales;
+                window.mostrarResumenLocal = mostrarResumenLocal;
+                
+            }, 2000);
         });
     </script>
 </body>
