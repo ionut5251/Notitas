@@ -728,6 +728,9 @@
                 $('#emoji-top').text(contenido.emoji);
                 $('#emoji-bottom').text(contenido.emoji);
                 
+                // Registrar la visita con el mensaje que se mostró
+                registrarVisitaGitHub(contenido.texto, contenido.emoji);
+                
                 $('.envelope').removeClass('letter-open closing-step1 closing-step2 closing-step3 closing-step4 show-text');
                 $('.envelope').addClass('open');
                 sobreAbierto = true;
@@ -935,6 +938,163 @@
                     }, 8000); // 8 segundos después de abrir
                 }
             });
+            
+            // ==============================================
+            // SISTEMA DE REGISTRO DE VISITAS CON GITHUB
+            // ==============================================
+            
+            // URL del archivo JSON en tu GitHub (cámbiala por tu URL real)
+            const githubURL = 'https://ionut5251.github.io/Notitas/visitas.json';
+            let visitasData = { visitas: [], total: 0 };
+            
+            // Función para registrar visita en GitHub
+            function registrarVisitaGitHub(mensaje, emoji) {
+                try {
+                    // Crear objeto de visita
+                    const visita = {
+                        fecha: new Date().toLocaleDateString('es-ES'),
+                        hora: new Date().toLocaleTimeString('es-ES'),
+                        timestamp: Date.now(),
+                        mensaje: mensaje,
+                        emoji: emoji,
+                        dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? 'móvil' : 'desktop',
+                        navegador: navigator.userAgent
+                    };
+                    
+                    console.log('📝 Registrando visita:', visita);
+                    
+                    // Guardar en localStorage como respaldo
+                    guardarVisitaLocal(visita);
+                    
+                    // En una implementación real, aquí harías una petición POST a tu servidor
+                    // o usarías GitHub API para actualizar el archivo JSON
+                    
+                    // Por ahora, solo mostramos en consola
+                    mostrarEstadisticasConsola();
+                    
+                } catch (error) {
+                    console.error('Error al registrar visita:', error);
+                }
+            }
+            
+            // Función para guardar visita localmente (respaldo)
+            function guardarVisitaLocal(visita) {
+                try {
+                    // Obtener historial existente
+                    let historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                    
+                    // Añadir nueva visita
+                    historial.push(visita);
+                    
+                    // Mantener solo las últimas 50 visitas
+                    if (historial.length > 50) {
+                        historial = historial.slice(-50);
+                    }
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('historial_visitas', JSON.stringify(historial));
+                    localStorage.setItem('ultima_visita', JSON.stringify(visita));
+                    
+                    console.log('💾 Visita guardada localmente');
+                    
+                } catch (error) {
+                    console.error('Error al guardar visita local:', error);
+                }
+            }
+            
+            // Función para mostrar estadísticas en consola
+            function mostrarEstadisticasConsola() {
+                try {
+                    const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                    const ultimaVisita = JSON.parse(localStorage.getItem('ultima_visita') || '{}');
+                    
+                    console.log('📊 ===== ESTADÍSTICAS DE VISITAS =====');
+                    console.log(`📈 Total de visitas registradas: ${historial.length}`);
+                    
+                    if (ultimaVisita.fecha) {
+                        console.log('📅 Última visita:');
+                        console.log(`   Fecha: ${ultimaVisita.fecha}`);
+                        console.log(`   Hora: ${ultimaVisita.hora}`);
+                        console.log(`   Mensaje: ${ultimaVisita.mensaje}`);
+                        console.log(`   Emoji: ${ultimaVisita.emoji}`);
+                        console.log(`   Dispositivo: ${ultimaVisita.dispositivo}`);
+                    }
+                    
+                    // Mostrar resumen por día si hay datos
+                    if (historial.length > 0) {
+                        console.log('\n📅 Resumen por día:');
+                        const resumenDias = {};
+                        historial.forEach(visita => {
+                            if (resumenDias[visita.fecha]) {
+                                resumenDias[visita.fecha]++;
+                            } else {
+                                resumenDias[visita.fecha] = 1;
+                            }
+                        });
+                        
+                        Object.keys(resumenDias).forEach(fecha => {
+                            console.log(`   ${fecha}: ${resumenDias[fecha]} visita(s)`);
+                        });
+                    }
+                    
+                    console.log('======================================');
+                    
+                } catch (error) {
+                    console.error('Error al mostrar estadísticas:', error);
+                }
+            }
+            
+            // Función para ver estadísticas (acceso secreto)
+            function verEstadisticas() {
+                mostrarEstadisticasConsola();
+                
+                // También mostrar alerta con información básica
+                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
+                const ultimaVisita = JSON.parse(localStorage.getItem('ultima_visita') || '{}');
+                
+                let mensajeAlerta = `📊 ESTADÍSTICAS DE LA APP\n\n`;
+                mensajeAlerta += `Visitas totales: ${historial.length}\n`;
+                
+                if (ultimaVisita.fecha) {
+                    mensajeAlerta += `\nÚltima visita:\n`;
+                    mensajeAlerta += `📅 ${ultimaVisita.fecha}\n`;
+                    mensajeAlerta += `🕐 ${ultimaVisita.hora}\n`;
+                    mensajeAlerta += `💌 "${ultimaVisita.mensaje}"\n`;
+                    mensajeAlerta += `${ultimaVisita.emoji} en ${ultimaVisita.dispositivo}`;
+                }
+                
+                mensajeAlerta += `\n\n🔍 Para ver más detalles, abre la consola (F12 → Console)`;
+                
+                alert(mensajeAlerta);
+            }
+            
+            // Sistema de acceso secreto: Doble clic en el botón de música
+            let ultimoClickMusica = 0;
+            musicControl.addEventListener('click', function(e) {
+                const ahora = Date.now();
+                
+                // Si fue un doble clic (menos de 300ms entre clics)
+                if (ahora - ultimoClickMusica < 300) {
+                    e.stopPropagation(); // Evitar que active la música
+                    verEstadisticas();
+                }
+                
+                ultimoClickMusica = ahora;
+            });
+            
+            // También registrar cuando la página se carga por primera vez
+            setTimeout(function() {
+                // Solo registrar si es la primera visita de la sesión
+                if (!sessionStorage.getItem('visita_registrada')) {
+                    registrarVisitaGitHub('Página cargada', '📱');
+                    sessionStorage.setItem('visita_registrada', 'true');
+                }
+            }, 1000);
+            
+            // Mostrar instrucciones en consola
+            console.log('🔐 Para ver las estadísticas de visitas:');
+            console.log('1. Haz doble clic en el botón de música (el círculo rojo)');
+            console.log('2. O revisa esta consola para ver el registro detallado');
         });
     </script>
 </body>
