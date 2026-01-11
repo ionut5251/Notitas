@@ -104,17 +104,17 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
         }
         
-        /* Reproductor de música avanzado */
+        /* Reproductor de música avanzado - MÁS PEQUEÑO */
         .music-player {
             position: relative;
-            margin: 30px auto 0;
+            margin: 10px auto 0; /* REDUCIDO de 30px a 10px */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 12px; /* REDUCIDO de 15px a 12px */
+            padding: 10px; /* REDUCIDO de 15px a 10px */
             width: 90%;
-            max-width: 350px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 300px; /* REDUCIDO de 350px a 300px */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* REDUCIDO de 8px a 4px */
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: none; /* OCULTO POR DEFECTO */
         }
@@ -122,25 +122,25 @@
         .song-selector {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
-            gap: 10px;
+            margin-bottom: 10px; /* REDUCIDO de 15px a 10px */
+            gap: 6px; /* REDUCIDO de 10px a 6px */
         }
         
         .song-btn {
             flex: 1;
-            padding: 8px 12px;
+            padding: 6px 8px; /* REDUCIDO de 8px 12px a 6px 8px */
             background: rgba(255, 82, 82, 0.8);
             border: none;
-            border-radius: 25px;
+            border-radius: 20px; /* REDUCIDO de 25px a 20px */
             color: white;
             font-family: 'Pacifico', cursive;
-            font-size: 14px;
+            font-size: 12px; /* REDUCIDO de 14px a 12px */
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 5px; /* REDUCIDO de 8px a 5px */
         }
         
         .song-btn:hover {
@@ -151,19 +151,19 @@
         .song-btn.active {
             background: #ffeb3b;
             color: #1c258b;
-            box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);
+            box-shadow: 0 2px 10px rgba(255, 235, 59, 0.4); /* REDUCIDO de 4px a 2px */
         }
         
         .player-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 10px; /* REDUCIDO de 15px a 10px */
+            margin-bottom: 8px; /* REDUCIDO de 10px a 8px */
         }
         
         .play-pause-btn {
-            width: 40px;
-            height: 40px;
+            width: 35px; /* REDUCIDO de 40px a 35px */
+            height: 35px; /* REDUCIDO de 40px a 35px */
             border-radius: 50%;
             background: rgba(255, 82, 82, 0.9);
             border: none;
@@ -187,8 +187,8 @@
         
         .song-title {
             color: white;
-            font-size: 14px;
-            margin-bottom: 2px;
+            font-size: 12px; /* REDUCIDO de 14px a 12px */
+            margin-bottom: 1px; /* REDUCIDO de 2px a 1px */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -196,25 +196,25 @@
         
         .song-artist {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 12px;
+            font-size: 10px; /* REDUCIDO de 12px a 10px */
         }
         
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 5px;
+            gap: 6px; /* REDUCIDO de 8px a 6px */
+            margin-top: 3px; /* REDUCIDO de 5px a 3px */
         }
         
         .volume-control i {
             color: white;
-            font-size: 16px;
+            font-size: 14px; /* REDUCIDO de 16px a 14px */
         }
         
         .volume-slider {
             flex: 1;
             -webkit-appearance: none;
-            height: 4px;
+            height: 3px; /* REDUCIDO de 4px a 3px */
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
             outline: none;
@@ -222,8 +222,8 @@
         
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 14px; /* REDUCIDO de 16px a 14px */
+            height: 14px; /* REDUCIDO de 16px a 14px */
             border-radius: 50%;
             background: #ff5252;
             cursor: pointer;
@@ -602,7 +602,7 @@
             50% { transform: translateX(-50%) translateY(3px); }
         }
         
-        /* Media queries para móvil */
+        /* Media queries para móvil - REPRODUCTOR AÚN MÁS PEQUEÑO */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -673,25 +673,69 @@
                 padding: 8px 12px;
             }
             
-            /* Ajustes para el reproductor en móvil */
+            /* Ajustes ESPECIALES para el reproductor en móvil - MÁS COMPACTO */
             .music-player {
-                margin: 20px auto 0;
-                padding: 12px;
+                margin: 5px auto 0; /* MÁS REDUCIDO: de 20px a 5px */
+                padding: 8px; /* MÁS REDUCIDO: de 12px a 8px */
                 width: 95%;
+                max-width: 280px; /* MÁS REDUCIDO: de 300px a 280px */
+                border-radius: 10px; /* MÁS REDUCIDO: de 12px a 10px */
             }
             
             .song-selector {
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
+                margin-bottom: 8px; /* MÁS REDUCIDO: de 10px a 8px */
             }
             
             .song-btn {
-                padding: 10px;
-                font-size: 13px;
+                padding: 8px; /* MÁS REDUCIDO: de 10px a 8px */
+                font-size: 11px; /* MÁS REDUCIDO: de 13px a 11px */
+                border-radius: 18px; /* MÁS REDUCIDO: de 20px a 18px */
+            }
+            
+            .player-controls {
+                gap: 8px; /* MÁS REDUCIDO: de 10px a 8px */
+                margin-bottom: 6px; /* MÁS REDUCIDO: de 8px a 6px */
+            }
+            
+            .play-pause-btn {
+                width: 32px; /* MÁS REDUCIDO: de 35px a 32px */
+                height: 32px; /* MÁS REDUCIDO: de 35px a 32px */
+            }
+            
+            .song-title {
+                font-size: 11px; /* MÁS REDUCIDO: de 12px a 11px */
+            }
+            
+            .song-artist {
+                font-size: 9px; /* MÁS REDUCIDO: de 10px a 9px */
+            }
+            
+            .volume-control {
+                gap: 5px; /* MÁS REDUCIDO: de 6px a 5px */
+                margin-top: 2px; /* MÁS REDUCIDO: de 3px a 2px */
+            }
+            
+            .volume-control i {
+                font-size: 12px; /* MÁS REDUCIDO: de 14px a 12px */
+            }
+            
+            .volume-slider {
+                height: 2px; /* MÁS REDUCIDO: de 3px a 2px */
+            }
+            
+            .volume-slider::-webkit-slider-thumb {
+                width: 12px; /* MÁS REDUCIDO: de 14px a 12px */
+                height: 12px; /* MÁS REDUCIDO: de 14px a 12px */
             }
         }
         
         @media (max-width: 480px) {
+            body {
+                padding: 10px; /* MÁS REDUCIDO para dar más espacio */
+            }
+            
             .envelope {
                 transform: scale(1.2);
             }
@@ -741,14 +785,30 @@
                 padding: 6px 10px;
             }
             
+            /* REPRODUCTOR AÚN MÁS COMPACTO para pantallas muy pequeñas */
             .music-player {
-                margin: 15px auto 0;
-                padding: 10px;
+                margin: 3px auto 0; /* MÍNIMO: 3px de margen superior */
+                padding: 6px; /* MÍNIMO: 6px de padding */
+                max-width: 260px; /* MÁS REDUCIDO: de 280px a 260px */
+                border-radius: 8px; /* MÁS REDUCIDO: de 10px a 8px */
             }
             
             .song-btn {
-                font-size: 12px;
-                padding: 8px;
+                font-size: 10px; /* MÁS REDUCIDO: de 11px a 10px */
+                padding: 6px; /* MÁS REDUCIDO: de 8px a 6px */
+            }
+            
+            .play-pause-btn {
+                width: 30px; /* MÁS REDUCIDO: de 32px a 30px */
+                height: 30px; /* MÁS REDUCIDO: de 32px a 30px */
+            }
+            
+            .song-title {
+                font-size: 10px; /* MÁS REDUCIDO: de 11px a 10px */
+            }
+            
+            .song-artist {
+                font-size: 8px; /* MÁS REDUCIDO: de 9px a 8px */
             }
         }
     </style>
@@ -768,7 +828,7 @@
             </div>
         </div>
         
-        <!-- Reproductor de música (INICIALMENTE OCULTO) -->
+        <!-- Reproductor de música (INICIALMENTE OCULTO y MÁS PEQUEÑO) -->
         <div class="music-player" id="musicPlayer">
             <div class="song-selector">
                 <button class="song-btn" data-song="1">
@@ -930,16 +990,14 @@
                 return textoElegido;
             }
             
-            // Función simplificada para mensajes seguidos (sin efectos visuales)
+            // Función simplificada para mensajes seguidos
             function verificarMensajesSeguidos() {
                 const ahora = Date.now();
                 
-                // Si pasaron menos de 10 segundos desde el último mensaje
                 if (ahora - ultimoMensajeTiempo < 10000) {
                     mensajesSeguidos++;
                     console.log(`📊 Mensajes seguidos: ${mensajesSeguidos}`);
                 } else {
-                    // Reiniciar contador si pasó mucho tiempo
                     mensajesSeguidos = 0;
                 }
                 
@@ -951,20 +1009,14 @@
                 animando = true;
                 animacionAbiertaCompleta = false;
                 
-                // Obtenemos texto y emoji aleatorio
                 const contenido = obtenerTextoYEmojiAleatorio();
                 
-                // Inyectamos el nuevo texto antes de empezar la animación
                 $('#texto-carta').text(contenido.texto);
-                
-                // Asignamos el emoji correspondiente tanto arriba como abajo
                 $('#emoji-top').text(contenido.emoji);
                 $('#emoji-bottom').text(contenido.emoji);
                 
-                // Verificar mensajes seguidos (sin efectos visuales)
                 verificarMensajesSeguidos();
                 
-                // Registrar evento en Google Analytics
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'sobre_abierto', {
                         'event_category': 'interaccion',
@@ -973,7 +1025,6 @@
                     });
                 }
                 
-                // Registrar la visita localmente
                 registrarVisitaLocal(contenido.texto, contenido.emoji);
                 
                 $('.envelope').removeClass('letter-open closing-step1 closing-step2 closing-step3 closing-step4 show-text');
@@ -984,7 +1035,6 @@
                     $('.envelope').removeClass('open').addClass('letter-open');
                     
                     setTimeout(function() {
-                        // Al añadir show-text, tanto el texto como los emojis aparecerán
                         $('.envelope').addClass('show-text');
                         animacionAbiertaCompleta = true;
                         animando = false;
@@ -996,7 +1046,6 @@
                 if (animando || !sobreAbierto) return;
                 animando = true;
                 
-                // Al quitar show-text, el texto y los emojis desaparecen
                 $('.envelope').removeClass('show-text');
                 
                 setTimeout(function() {
@@ -1019,7 +1068,6 @@
                                 
                                 setTimeout(function() {
                                     $('.envelope').removeClass('closing-step4');
-                                    // Limpiamos el texto y emojis al terminar de cerrar
                                     $('#texto-carta').text('');
                                     $('#emoji-top').text('');
                                     $('#emoji-bottom').text('');
@@ -1043,10 +1091,9 @@
             });
             
             // ==============================================
-            // SISTEMA DE MÚSICA AVANZADO (CORREGIDO)
+            // SISTEMA DE MÚSICA AVANZADO
             // ==============================================
             
-            // Elementos del reproductor
             const songs = [
                 {
                     id: 1,
@@ -1076,22 +1123,17 @@
             let wasPlayingBeforeHidden = false;
             const musicNotification = document.getElementById('musicNotification');
             
-            // Función para cambiar canción
             function changeSong(songIndex) {
-                // Pausar canción actual
                 songs[currentSongIndex].element.pause();
                 songs[currentSongIndex].button.removeClass('active');
                 
-                // Cambiar a nueva canción
                 currentSongIndex = songIndex;
                 const currentSong = songs[currentSongIndex];
                 
-                // Actualizar interfaz
                 currentSong.button.addClass('active');
                 $('#currentSongTitle').text(currentSong.title);
                 $('#currentSongArtist').text(currentSong.artist);
                 
-                // Registrar evento en Google Analytics
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'cancion_cambiada', {
                         'event_category': 'musica',
@@ -1100,22 +1142,18 @@
                     });
                 }
                 
-                // Si estaba reproduciendo, iniciar nueva canción
                 if (isPlaying) {
                     currentSong.element.currentTime = 0;
                     currentSong.element.play().then(() => {
-                        // Actualizar icono de play/pause a pause
                         $('#playPauseBtn i').removeClass('fa-play').addClass('fa-pause');
                     }).catch(error => {
                         console.log("Error al reproducir:", error);
                     });
                 }
                 
-                // Guardar preferencia
                 localStorage.setItem('selectedSong', currentSongIndex);
             }
             
-            // Función para play/pause (CORREGIDA)
             function togglePlayPause() {
                 const currentSong = songs[currentSongIndex];
                 const playPauseIcon = $('#playPauseBtn i');
@@ -1125,7 +1163,6 @@
                     playPauseIcon.removeClass('fa-pause').addClass('fa-play');
                     showNotification("Música pausada");
                     
-                    // Registrar evento en Google Analytics
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'musica_pausada', {
                             'event_category': 'musica',
@@ -1137,7 +1174,6 @@
                         playPauseIcon.removeClass('fa-play').addClass('fa-pause');
                         showNotification(`Reproduciendo: ${currentSong.title}`);
                         
-                        // Registrar evento en Google Analytics
                         if (typeof gtag !== 'undefined') {
                             gtag('event', 'musica_iniciada', {
                                 'event_category': 'musica',
@@ -1147,7 +1183,6 @@
                     }).catch(error => {
                         console.log("Error al reproducir:", error);
                         showNotification("Haz clic en el sobre primero para activar la música");
-                        // Si hay error, mantener icono de play
                         isPlaying = false;
                     });
                 }
@@ -1156,7 +1191,6 @@
                 localStorage.setItem('musicPlaying', isPlaying);
             }
             
-            // Función para mostrar notificación
             function showNotification(message) {
                 musicNotification.textContent = message;
                 musicNotification.classList.add('show');
@@ -1166,7 +1200,6 @@
                 }, 3000);
             }
             
-            // Función para actualizar volumen
             function updateVolume(value) {
                 const volume = value / 100;
                 songs.forEach(song => {
@@ -1175,9 +1208,7 @@
                 localStorage.setItem('musicVolume', value);
             }
             
-            // Inicializar reproductor
             function initializePlayer() {
-                // Cargar preferencias
                 const savedSong = localStorage.getItem('selectedSong');
                 const savedVolume = localStorage.getItem('musicVolume');
                 const savedPlaying = localStorage.getItem('musicPlaying');
@@ -1200,7 +1231,6 @@
                 if (savedPlaying === 'true') {
                     isPlaying = true;
                     $('#playPauseBtn i').removeClass('fa-play').addClass('fa-pause');
-                    // Intentar reproducir la canción
                     setTimeout(() => {
                         songs[currentSongIndex].element.play().catch(e => {
                             console.log("No se pudo reproducir automáticamente:", e);
@@ -1210,26 +1240,21 @@
                     }, 500);
                 }
                 
-                // Configurar eventos de fin de canción
                 songs.forEach((song, index) => {
                     song.element.addEventListener('ended', () => {
                         if (isPlaying) {
-                            // Repetir la misma canción (loop)
                             song.element.currentTime = 0;
                             song.element.play();
                         }
                     });
                     
-                    // Actualizar estado cuando se pausa manualmente
                     song.element.addEventListener('pause', () => {
-                        // Solo cambiar icono si no estamos cambiando de canción
                         if (isPlaying && currentSongIndex === index) {
                             isPlaying = false;
                             $('#playPauseBtn i').removeClass('fa-pause').addClass('fa-play');
                         }
                     });
                     
-                    // Actualizar estado cuando se reanuda
                     song.element.addEventListener('play', () => {
                         if (!isPlaying && currentSongIndex === index) {
                             isPlaying = true;
@@ -1239,7 +1264,6 @@
                 });
             }
             
-            // Event listeners para controles de música
             $('.song-btn').click(function() {
                 const songIndex = parseInt($(this).data('song')) - 1;
                 changeSong(songIndex);
@@ -1253,21 +1277,18 @@
                 updateVolume($(this).val());
             });
             
-            // BOTÓN CORREGIDO: Funciona con un solo clic/toque
             $('#musicControl').click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Alternar visibilidad del reproductor
                 if ($('#musicPlayer').is(':visible')) {
-                    $('#musicPlayer').slideUp(300);
+                    $('#musicPlayer').slideUp(200); /* Animación más rápida */
                 } else {
-                    $('#musicPlayer').slideDown(300);
+                    $('#musicPlayer').slideDown(200); /* Animación más rápida */
                 }
                 
                 $(this).toggleClass('pulsing');
                 
-                // Registrar evento en Google Analytics
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'reproductor_toggle', {
                         'event_category': 'interfaz'
@@ -1277,37 +1298,31 @@
                 return false;
             });
             
-            // Control táctil para móviles (CORREGIDO)
             $('#musicControl').on('touchstart', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Alternar visibilidad del reproductor
                 if ($('#musicPlayer').is(':visible')) {
-                    $('#musicPlayer').slideUp(300);
+                    $('#musicPlayer').slideUp(200);
                 } else {
-                    $('#musicPlayer').slideDown(300);
+                    $('#musicPlayer').slideDown(200);
                 }
                 
                 $(this).toggleClass('pulsing');
                 return false;
             });
             
-            // Prevenir que otros eventos interfieran
             $('#musicControl').on('touchmove', function(e) {
                 e.preventDefault();
             });
             
-            // --- DETECCIÓN DE VISIBILIDAD DE LA PÁGINA ---
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
-                    // La página ya no es visible
                     if (isPlaying) {
                         wasPlayingBeforeHidden = true;
                         songs[currentSongIndex].element.pause();
                     }
                 } else {
-                    // La página es visible nuevamente
                     if (wasPlayingBeforeHidden) {
                         wasPlayingBeforeHidden = false;
                         if (isPlaying) {
@@ -1317,7 +1332,6 @@
                 }
             });
             
-            // Detectar cuando la ventana pierde el foco
             window.addEventListener('blur', function() {
                 if (isPlaying) {
                     wasPlayingBeforeHidden = true;
@@ -1325,7 +1339,6 @@
                 }
             });
             
-            // Restaurar cuando la ventana recupera el foco
             window.addEventListener('focus', function() {
                 if (wasPlayingBeforeHidden && isPlaying) {
                     wasPlayingBeforeHidden = false;
@@ -1337,10 +1350,8 @@
             // SISTEMA DE REGISTRO LOCAL DE VISITAS
             // ==============================================
             
-            // Función para registrar visita localmente
             async function registrarVisitaLocal(mensaje, emoji) {
                 try {
-                    // Crear objeto de visita
                     const visita = {
                         fecha: new Date().toLocaleDateString('es-ES'),
                         hora: new Date().toLocaleTimeString('es-ES'),
@@ -1354,10 +1365,8 @@
                     
                     console.log('📝 Registrando visita local:', visita);
                     
-                    // Guardar en localStorage
                     guardarVisitaLocalStorage(visita);
                     
-                    // Registrar evento en Google Analytics
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'mensaje_visto', {
                             'event_category': 'contenido',
@@ -1371,7 +1380,6 @@
                 }
             }
             
-            // Función para obtener IP aproximada
             async function obtenerIP() {
                 try {
                     const response = await fetch('https://api.ipify.org?format=json');
@@ -1382,13 +1390,11 @@
                 }
             }
             
-            // Función para guardar visita en localStorage
             function guardarVisitaLocalStorage(visita) {
                 try {
                     let historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
                     historial.push(visita);
                     
-                    // Limitar a 100 registros para no saturar
                     if (historial.length > 100) {
                         historial = historial.slice(-100);
                     }
@@ -1396,7 +1402,6 @@
                     localStorage.setItem('historial_visitas', JSON.stringify(historial));
                     localStorage.setItem('ultima_visita', JSON.stringify(visita));
                     
-                    // Mostrar resumen en consola
                     mostrarResumenLocal();
                     
                 } catch (error) {
@@ -1404,7 +1409,6 @@
                 }
             }
             
-            // Función para mostrar resumen local
             function mostrarResumenLocal() {
                 const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
                 if (historial.length > 0) {
@@ -1413,7 +1417,6 @@
                     const hoyCount = historial.filter(v => v.fecha === hoy).length;
                     console.log(`📅 Hoy (${hoy}): ${hoyCount} visita(s)`);
                     
-                    // Mostrar últimos 5 mensajes
                     console.log('📝 Últimos mensajes:');
                     historial.slice(-5).reverse().forEach((v, i) => {
                         console.log(`   ${v.hora}: "${v.mensaje}" ${v.emoji}`);
@@ -1421,7 +1424,6 @@
                 }
             }
             
-            // Función para exportar datos locales
             function exportarDatosLocales() {
                 const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
                 const datos = {
@@ -1444,7 +1446,6 @@
                 showNotification("Datos exportados a archivo JSON");
             }
             
-            // Función para ver estadísticas
             function verEstadisticas() {
                 const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
                 
@@ -1453,7 +1454,6 @@
                 console.log(`%cTotal mensajes vistos: ${historial.length}`, 'color: #4CAF50');
                 
                 if (historial.length > 0) {
-                    // Contar por fecha
                     const porFecha = {};
                     historial.forEach(v => {
                         porFecha[v.fecha] = (porFecha[v.fecha] || 0) + 1;
@@ -1464,7 +1464,6 @@
                         console.log(`   ${fecha}: ${count} mensaje(s)`);
                     });
                     
-                    // Mostrar últimos 15 mensajes
                     console.log('\n%c📋 ÚLTIMOS MENSAJES:', 'color: #FF9800; font-weight: bold');
                     historial.slice(-15).reverse().forEach((visita, index) => {
                         const num = historial.length - index;
@@ -1483,15 +1482,12 @@
             
             // Inicializar todo
             setTimeout(async function() {
-                // Inicializar reproductor
                 initializePlayer();
                 
-                // Registrar primera visita
                 if (!sessionStorage.getItem('visita_registrada')) {
                     await registrarVisitaLocal('Página cargada', '📱');
                     sessionStorage.setItem('visita_registrada', 'true');
                     
-                    // Registrar página cargada en Google Analytics
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'page_load', {
                             'event_category': 'navegacion',
@@ -1500,18 +1496,13 @@
                     }
                 }
                 
-                // Mostrar notificación
                 showNotification("¡Descubre mensajes especiales!");
                 $('#musicControl').addClass('pulsing');
-                
-                // Reproductor ya está oculto por CSS (display: none)
-                // No necesitamos esconderlo con JavaScript
                 
                 setTimeout(function() {
                     $('#musicControl').removeClass('pulsing');
                 }, 10000);
                 
-                // Instrucciones en consola
                 console.log('🎵 REPRODUCTOR DE MÚSICA - 3 canciones');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
                 console.log('• Cada mensaje se guarda en localStorage');
@@ -1519,7 +1510,6 @@
                 console.log('• Para exportar locales: exportarDatosLocales()');
                 console.log('📈 Google Analytics activo para seguimiento');
                 
-                // Hacer funciones accesibles
                 window.verEstadisticas = verEstadisticas;
                 window.exportarDatosLocales = exportarDatosLocales;
                 window.mostrarResumenLocal = mostrarResumenLocal;
