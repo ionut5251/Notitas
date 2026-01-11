@@ -729,7 +729,7 @@
                 $('#emoji-bottom').text(contenido.emoji);
                 
                 // Registrar la visita con el mensaje que se mostró
-                registrarVisitaGitHub(contenido.texto, contenido.emoji);
+                registrarVisita(contenido.texto, contenido.emoji);
                 
                 $('.envelope').removeClass('letter-open closing-step1 closing-step2 closing-step3 closing-step4 show-text');
                 $('.envelope').addClass('open');
@@ -940,15 +940,11 @@
             });
             
             // ==============================================
-            // SISTEMA DE REGISTRO DE VISITAS CON GITHUB
+            // SISTEMA DE REGISTRO DE VISITAS MEJORADO
             // ==============================================
             
-            // URL del archivo JSON en tu GitHub (cámbiala por tu URL real)
-            const githubURL = 'https://ionut5251.github.io/Notitas/visitas.json';
-            let visitasData = { visitas: [], total: 0 };
-            
-            // Función para registrar visita en GitHub
-            function registrarVisitaGitHub(mensaje, emoji) {
+            // Función para registrar visita
+            function registrarVisita(mensaje, emoji) {
                 try {
                     // Crear objeto de visita
                     const visita = {
@@ -958,26 +954,23 @@
                         mensaje: mensaje,
                         emoji: emoji,
                         dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? 'móvil' : 'desktop',
-                        navegador: navigator.userAgent
+                        navegador: navigator.userAgent.substring(0, 100) // Solo primeros 100 caracteres
                     };
                     
-                    console.log('📝 Registrando visita:', visita);
+                    console.log('📝 Visita registrada:', visita);
                     
-                    // Guardar en localStorage como respaldo
+                    // Guardar en localStorage
                     guardarVisitaLocal(visita);
                     
-                    // En una implementación real, aquí harías una petición POST a tu servidor
-                    // o usarías GitHub API para actualizar el archivo JSON
-                    
-                    // Por ahora, solo mostramos en consola
-                    mostrarEstadisticasConsola();
+                    // Mostrar resumen automáticamente en consola
+                    mostrarResumenVisitas();
                     
                 } catch (error) {
                     console.error('Error al registrar visita:', error);
                 }
             }
             
-            // Función para guardar visita localmente (respaldo)
+            // Función para guardar visita localmente
             function guardarVisitaLocal(visita) {
                 try {
                     // Obtener historial existente
@@ -986,115 +979,113 @@
                     // Añadir nueva visita
                     historial.push(visita);
                     
-                    // Mantener solo las últimas 50 visitas
-                    if (historial.length > 50) {
-                        historial = historial.slice(-50);
+                    // Mantener solo las últimas 100 visitas
+                    if (historial.length > 100) {
+                        historial = historial.slice(-100);
                     }
                     
                     // Guardar en localStorage
                     localStorage.setItem('historial_visitas', JSON.stringify(historial));
                     localStorage.setItem('ultima_visita', JSON.stringify(visita));
                     
-                    console.log('💾 Visita guardada localmente');
-                    
                 } catch (error) {
                     console.error('Error al guardar visita local:', error);
                 }
             }
             
-            // Función para mostrar estadísticas en consola
-            function mostrarEstadisticasConsola() {
+            // Función para mostrar resumen COMPLETO de visitas
+            function mostrarResumenVisitas() {
                 try {
                     const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                    const ultimaVisita = JSON.parse(localStorage.getItem('ultima_visita') || '{}');
                     
-                    console.log('📊 ===== ESTADÍSTICAS DE VISITAS =====');
-                    console.log(`📈 Total de visitas registradas: ${historial.length}`);
-                    
-                    if (ultimaVisita.fecha) {
-                        console.log('📅 Última visita:');
-                        console.log(`   Fecha: ${ultimaVisita.fecha}`);
-                        console.log(`   Hora: ${ultimaVisita.hora}`);
-                        console.log(`   Mensaje: ${ultimaVisita.mensaje}`);
-                        console.log(`   Emoji: ${ultimaVisita.emoji}`);
-                        console.log(`   Dispositivo: ${ultimaVisita.dispositivo}`);
+                    if (historial.length === 0) {
+                        console.log('📊 No hay visitas registradas aún.');
+                        return;
                     }
                     
-                    // Mostrar resumen por día si hay datos
-                    if (historial.length > 0) {
-                        console.log('\n📅 Resumen por día:');
-                        const resumenDias = {};
-                        historial.forEach(visita => {
-                            if (resumenDias[visita.fecha]) {
-                                resumenDias[visita.fecha]++;
-                            } else {
-                                resumenDias[visita.fecha] = 1;
-                            }
-                        });
-                        
-                        Object.keys(resumenDias).forEach(fecha => {
-                            console.log(`   ${fecha}: ${resumenDias[fecha]} visita(s)`);
-                        });
-                    }
+                    console.clear();
+                    console.log('%c📊 ===== RESUMEN COMPLETO DE VISITAS =====', 'color: #ff5252; font-size: 16px; font-weight: bold');
+                    console.log(`%cTOTAL VISITAS: ${historial.length}`, 'color: #4CAF50; font-size: 14px;');
                     
-                    console.log('======================================');
+                    // Mostrar visitas de HOY
+                    const hoy = new Date().toLocaleDateString('es-ES');
+                    const visitasHoy = historial.filter(v => v.fecha === hoy);
+                    console.log(`%c📅 Hoy (${hoy}): ${visitasHoy.length} visita(s)`, 'color: #2196F3;');
+                    
+                    // Mostrar TODAS las visitas en orden cronológico inverso (más recientes primero)
+                    console.log('\n%c📋 TODAS LAS VISITAS (más recientes primero):', 'color: #9C27B0; font-weight: bold');
+                    
+                    historial.slice().reverse().forEach((visita, index) => {
+                        const num = historial.length - index;
+                        console.log(`\n%c${num}. ${visita.fecha} - ${visita.hora}`, 'color: #FF9800;');
+                        console.log(`   💌 "${visita.mensaje}" ${visita.emoji}`);
+                        console.log(`   📱 ${visita.dispositivo}`);
+                        console.log(`   🌐 ${visita.navegador.split(' ')[0]}`); // Solo el nombre del navegador
+                    });
+                    
+                    // Resumen por día
+                    console.log('\n%c📈 RESUMEN POR DÍA:', 'color: #E91E63; font-weight: bold');
+                    const resumenDias = {};
+                    historial.forEach(visita => {
+                        if (resumenDias[visita.fecha]) {
+                            resumenDias[visita.fecha]++;
+                        } else {
+                            resumenDias[visita.fecha] = 1;
+                        }
+                    });
+                    
+                    // Ordenar días (más reciente primero)
+                    Object.keys(resumenDias)
+                        .sort((a, b) => new Date(b.split('/').reverse().join('-')) - new Date(a.split('/').reverse().join('-')))
+                        .forEach(fecha => {
+                            const barras = '█'.repeat(Math.min(resumenDias[fecha], 20));
+                            console.log(`   ${fecha}: ${barras} ${resumenDias[fecha]}`);
+                        });
+                    
+                    console.log('\n%c============================================', 'color: #ff5252; font-weight: bold');
                     
                 } catch (error) {
-                    console.error('Error al mostrar estadísticas:', error);
+                    console.error('Error al mostrar resumen:', error);
                 }
             }
             
-            // Función para ver estadísticas (acceso secreto)
-            function verEstadisticas() {
-                mostrarEstadisticasConsola();
-                
-                // También mostrar alerta con información básica
+            // Función para mostrar estadísticas rápidas (sin alert, solo consola)
+            function mostrarEstadisticasRapidas() {
                 const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                const ultimaVisita = JSON.parse(localStorage.getItem('ultima_visita') || '{}');
+                const hoy = new Date().toLocaleDateString('es-ES');
+                const visitasHoy = historial.filter(v => v.fecha === hoy);
                 
-                let mensajeAlerta = `📊 ESTADÍSTICAS DE LA APP\n\n`;
-                mensajeAlerta += `Visitas totales: ${historial.length}\n`;
+                console.log(`📊 Hoy has usado la app ${visitasHoy.length} vez/veces`);
+                console.log(`📈 Total de visitas registradas: ${historial.length}`);
                 
-                if (ultimaVisita.fecha) {
-                    mensajeAlerta += `\nÚltima visita:\n`;
-                    mensajeAlerta += `📅 ${ultimaVisita.fecha}\n`;
-                    mensajeAlerta += `🕐 ${ultimaVisita.hora}\n`;
-                    mensajeAlerta += `💌 "${ultimaVisita.mensaje}"\n`;
-                    mensajeAlerta += `${ultimaVisita.emoji} en ${ultimaVisita.dispositivo}`;
+                if (visitasHoy.length > 0) {
+                    console.log('\n📅 Tus visitas de hoy:');
+                    visitasHoy.slice().reverse().forEach((visita, index) => {
+                        console.log(`   ${index + 1}. ${visita.hora} - "${visita.mensaje}" ${visita.emoji}`);
+                    });
                 }
-                
-                mensajeAlerta += `\n\n🔍 Para ver más detalles, abre la consola (F12 → Console)`;
-                
-                alert(mensajeAlerta);
             }
             
-            // Sistema de acceso secreto: Doble clic en el botón de música
-            let ultimoClickMusica = 0;
-            musicControl.addEventListener('click', function(e) {
-                const ahora = Date.now();
-                
-                // Si fue un doble clic (menos de 300ms entre clics)
-                if (ahora - ultimoClickMusica < 300) {
-                    e.stopPropagation(); // Evitar que active la música
-                    verEstadisticas();
-                }
-                
-                ultimoClickMusica = ahora;
-            });
-            
-            // También registrar cuando la página se carga por primera vez
+            // Registrar cuando la página se carga por primera vez
             setTimeout(function() {
-                // Solo registrar si es la primera visita de la sesión
                 if (!sessionStorage.getItem('visita_registrada')) {
-                    registrarVisitaGitHub('Página cargada', '📱');
+                    registrarVisita('Página cargada', '📱');
                     sessionStorage.setItem('visita_registrada', 'true');
                 }
+                
+                // Mostrar instrucciones en consola
+                console.log('%c🔍 INSTRUCCIONES PARA VER ESTADÍSTICAS:', 'color: #4CAF50; font-weight: bold');
+                console.log('1. Abre la consola (F12 → Console)');
+                console.log('2. Cada vez que abras un mensaje, se mostrará automáticamente el resumen');
+                console.log('3. O escribe en la consola: mostrarResumenVisitas()');
+                console.log('4. Para un resumen rápido: mostrarEstadisticasRapidas()');
+                console.log('\n📝 Las visitas se guardan en localStorage de tu navegador.');
+                
             }, 1000);
             
-            // Mostrar instrucciones en consola
-            console.log('🔐 Para ver las estadísticas de visitas:');
-            console.log('1. Haz doble clic en el botón de música (el círculo rojo)');
-            console.log('2. O revisa esta consola para ver el registro detallado');
+            // Hacer las funciones accesibles desde la consola
+            window.mostrarResumenVisitas = mostrarResumenVisitas;
+            window.mostrarEstadisticasRapidas = mostrarEstadisticasRapidas;
         });
     </script>
 </body>
