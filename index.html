@@ -116,6 +116,7 @@
             max-width: 350px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none; /* OCULTO POR DEFECTO */
         }
         
         .song-selector {
@@ -451,35 +452,6 @@
             animation: floatDown 2s ease-in-out infinite;
         }
         
-        /* Efectos especiales para mensajes seguidos */
-        .effects-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        
-        .heart-effect, .kiss-effect {
-            position: absolute;
-            font-size: 30px;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 10000;
-        }
-        
-        .heart-effect {
-            color: #ff4081;
-            animation: floatHearts 4s ease-in-out forwards;
-        }
-        
-        .kiss-effect {
-            color: #ff5252;
-            animation: floatKisses 3s ease-in-out forwards;
-        }
-        
         /* ANIMACIONES DE LA CARTA */
         .envelope.open .letter {
             animation-name: remove;
@@ -617,36 +589,6 @@
         @keyframes floatDown {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(5px); }
-        }
-        
-        @keyframes floatHearts {
-            0% { 
-                opacity: 1;
-                transform: translateY(0) scale(0.5);
-            }
-            20% {
-                opacity: 0.8;
-                transform: translateY(-20px) scale(1);
-            }
-            100% { 
-                opacity: 0;
-                transform: translateY(-100px) scale(0.5);
-            }
-        }
-        
-        @keyframes floatKisses {
-            0% { 
-                opacity: 1;
-                transform: translateY(0) scale(1) rotate(0deg);
-            }
-            30% {
-                opacity: 0.9;
-                transform: translateY(-30px) scale(1.2) rotate(10deg);
-            }
-            100% { 
-                opacity: 0;
-                transform: translateY(-120px) scale(0.8) rotate(-10deg);
-            }
         }
 
         /* Animaciones específicas para móvil */
@@ -826,7 +768,7 @@
             </div>
         </div>
         
-        <!-- Reproductor de música -->
+        <!-- Reproductor de música (INICIALMENTE OCULTO) -->
         <div class="music-player" id="musicPlayer">
             <div class="song-selector">
                 <button class="song-btn" data-song="1">
@@ -857,9 +799,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- Contenedor para efectos especiales -->
-    <div class="effects-container" id="effectsContainer"></div>
     
     <!-- Botón de control de música flotante -->
     <div class="music-control" id="musicControl">
@@ -930,7 +869,7 @@
                 },
                 {
                     texto: "Que nada te quite esa sonrisa!",
-                    emoji: "💙"  
+                    emoji: "💙" 
                 },
                 {
                     texto: "Cualquier día se vuelve más bonito cuando te veo sonreír.",
@@ -991,58 +930,14 @@
                 return textoElegido;
             }
             
-            // Función para crear efectos especiales
-            function crearEfecto(tipo) {
-                const container = $('#effectsContainer');
-                const efecto = document.createElement('div');
-                
-                if (tipo === 'heart') {
-                    efecto.className = 'heart-effect';
-                    efecto.innerHTML = '❤️';
-                    efecto.style.left = Math.random() * 90 + 5 + '%';
-                    efecto.style.fontSize = (Math.random() * 20 + 25) + 'px';
-                } else if (tipo === 'kiss') {
-                    efecto.className = 'kiss-effect';
-                    efecto.innerHTML = '💋';
-                    efecto.style.left = Math.random() * 90 + 5 + '%';
-                    efecto.style.fontSize = (Math.random() * 15 + 30) + 'px';
-                }
-                
-                efecto.style.top = '80%';
-                container.append(efecto);
-                
-                // Eliminar después de la animación
-                setTimeout(() => {
-                    efecto.remove();
-                }, tipo === 'heart' ? 4000 : 3000);
-            }
-            
-            // Función para verificar y activar efectos por mensajes seguidos
-            function verificarEfectosEspeciales() {
+            // Función simplificada para mensajes seguidos (sin efectos visuales)
+            function verificarMensajesSeguidos() {
                 const ahora = Date.now();
                 
                 // Si pasaron menos de 10 segundos desde el último mensaje
                 if (ahora - ultimoMensajeTiempo < 10000) {
                     mensajesSeguidos++;
-                    
                     console.log(`📊 Mensajes seguidos: ${mensajesSeguidos}`);
-                    
-                    // Efecto después de 2, 6, 10, etc. mensajes seguidos (cada 4)
-                    if (mensajesSeguidos % 4 === 2) {
-                        console.log('💖 Activando efecto de corazones');
-                        // Crear múltiples corazones
-                        for (let i = 0; i < 8; i++) {
-                            setTimeout(() => crearEfecto('heart'), i * 200);
-                        }
-                    }
-                    // Efecto después de 4, 8, 12, etc. mensajes seguidos (cada 4)
-                    else if (mensajesSeguidos % 4 === 0 && mensajesSeguidos > 0) {
-                        console.log('💋 Activando efecto de besos');
-                        // Crear múltiples besos
-                        for (let i = 0; i < 12; i++) {
-                            setTimeout(() => crearEfecto('kiss'), i * 150);
-                        }
-                    }
                 } else {
                     // Reiniciar contador si pasó mucho tiempo
                     mensajesSeguidos = 0;
@@ -1066,8 +961,8 @@
                 $('#emoji-top').text(contenido.emoji);
                 $('#emoji-bottom').text(contenido.emoji);
                 
-                // Verificar efectos especiales por mensajes seguidos
-                verificarEfectosEspeciales();
+                // Verificar mensajes seguidos (sin efectos visuales)
+                verificarMensajesSeguidos();
                 
                 // Registrar evento en Google Analytics
                 if (typeof gtag !== 'undefined') {
@@ -1089,7 +984,7 @@
                     $('.envelope').removeClass('open').addClass('letter-open');
                     
                     setTimeout(function() {
-                        // Al añadir show-text, tanto el texto como los emojis aparecerán (CSS opacity)
+                        // Al añadir show-text, tanto el texto como los emojis aparecerán
                         $('.envelope').addClass('show-text');
                         animacionAbiertaCompleta = true;
                         animando = false;
@@ -1101,7 +996,7 @@
                 if (animando || !sobreAbierto) return;
                 animando = true;
                 
-                // Al quitar show-text, el texto y los emojis desaparecen inmediatamente con la transición
+                // Al quitar show-text, el texto y los emojis desaparecen
                 $('.envelope').removeClass('show-text');
                 
                 setTimeout(function() {
@@ -1124,7 +1019,7 @@
                                 
                                 setTimeout(function() {
                                     $('.envelope').removeClass('closing-step4');
-                                    // Limpiamos el texto y emojis al terminar de cerrar para el siguiente ciclo
+                                    // Limpiamos el texto y emojis al terminar de cerrar
                                     $('#texto-carta').text('');
                                     $('#emoji-top').text('');
                                     $('#emoji-bottom').text('');
@@ -1358,9 +1253,18 @@
                 updateVolume($(this).val());
             });
             
-            // Botón de música flotante (alterna mostrar/ocultar reproductor)
-            $('#musicControl').click(function() {
-                $('#musicPlayer').slideToggle(300);
+            // BOTÓN CORREGIDO: Funciona con un solo clic/toque
+            $('#musicControl').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Alternar visibilidad del reproductor
+                if ($('#musicPlayer').is(':visible')) {
+                    $('#musicPlayer').slideUp(300);
+                } else {
+                    $('#musicPlayer').slideDown(300);
+                }
+                
                 $(this).toggleClass('pulsing');
                 
                 // Registrar evento en Google Analytics
@@ -1369,13 +1273,29 @@
                         'event_category': 'interfaz'
                     });
                 }
+                
+                return false;
             });
             
-            // Control táctil para móviles
+            // Control táctil para móviles (CORREGIDO)
             $('#musicControl').on('touchstart', function(e) {
                 e.preventDefault();
-                $('#musicPlayer').slideToggle(300);
+                e.stopPropagation();
+                
+                // Alternar visibilidad del reproductor
+                if ($('#musicPlayer').is(':visible')) {
+                    $('#musicPlayer').slideUp(300);
+                } else {
+                    $('#musicPlayer').slideDown(300);
+                }
+                
                 $(this).toggleClass('pulsing');
+                return false;
+            });
+            
+            // Prevenir que otros eventos interfieran
+            $('#musicControl').on('touchmove', function(e) {
+                e.preventDefault();
             });
             
             // --- DETECCIÓN DE VISIBILIDAD DE LA PÁGINA ---
@@ -1584,10 +1504,8 @@
                 showNotification("¡Descubre mensajes especiales!");
                 $('#musicControl').addClass('pulsing');
                 
-                // Ocultar reproductor por defecto en móvil
-                if (window.innerWidth <= 768) {
-                    $('#musicPlayer').hide();
-                }
+                // Reproductor ya está oculto por CSS (display: none)
+                // No necesitamos esconderlo con JavaScript
                 
                 setTimeout(function() {
                     $('#musicControl').removeClass('pulsing');
@@ -1600,7 +1518,6 @@
                 console.log('• Para ver estadísticas: verEstadisticas()');
                 console.log('• Para exportar locales: exportarDatosLocales()');
                 console.log('📈 Google Analytics activo para seguimiento');
-                console.log('💖 Efectos especiales cada 2 y 4 mensajes seguidos');
                 
                 // Hacer funciones accesibles
                 window.verEstadisticas = verEstadisticas;
