@@ -1008,13 +1008,12 @@
                     const horaActualDia = hora + minuto/60 - amanecer;
                     const progresoDia = horaActualDia / duracionDia;
                     
-                    // Posición del sol en el cielo (arco)
+                    // Posición del sol en el cielo (arco) - AJUSTADO MÁS ARRIBA
                     const angulo = progresoDia * Math.PI; // 0 a π radianes
-                    const radio = 100; // Radio del movimiento
                     
-                    // Coordenadas para el arco del sol
+                    // Coordenadas para el arco del sol - MÁS ARRIBA (de 10% a 40% de altura)
                     const x = 50 + Math.sin(angulo) * 40; // 10% a 90% del ancho
-                    const y = 20 + Math.cos(angulo) * 60; // 20% a 80% de la altura
+                    const y = 10 + Math.cos(angulo) * 40; // AJUSTADO: 10% a 50% de la altura (más arriba)
                     
                     // Estilo del sol
                     sol.style.left = x + '%';
@@ -1068,9 +1067,9 @@
                     const progresoNoche = horaActualNoche / duracionNoche;
                     const angulo = progresoNoche * Math.PI;
                     
-                    // Coordenadas para el arco de la luna
+                    // Coordenadas para el arco de la luna - AJUSTADO MÁS ARRIBA
                     const x = 50 + Math.sin(angulo) * 40;
-                    const y = 20 + Math.cos(angulo) * 60;
+                    const y = 10 + Math.cos(angulo) * 40; // AJUSTADO: 10% a 50% de la altura (más arriba)
                     
                     // Estilo de la luna
                     luna.style.left = x + '%';
