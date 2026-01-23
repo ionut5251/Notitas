@@ -1175,8 +1175,8 @@
                 const totalSegundos = hora * 3600 + minuto * 60 + segundo;
                 const porcentajeDia = totalSegundos / 86400; // 86400 segundos en un día
                 
-                // Calcular posición del sol (6:00 AM a 6:00 PM)
-                const amanecer = 6; // 6:00 AM
+                // Calcular posición del sol (8:00 AM a 6:00 PM)
+                const amanecer = 8; // 8:00 AM
                 const atardecer = 18; // 6:00 PM
                 
                 const sol = document.getElementById('sol');
@@ -1279,15 +1279,15 @@
                 // Actualizar fondo del body según la hora
                 let colorInicio, colorFin;
                 
-                if (hora >= 5 && hora < 8) {
+                if (hora >= amanecer - 1 && hora < amanecer + 1) {  // 7:00-9:00
                     // Amanecer
                     colorInicio = '#1a2980';
                     colorFin = '#26d0ce';
-                } else if (hora >= 8 && hora < 16) {
+                } else if (hora >= amanecer && hora < atardecer - 2) {  // 8:00-16:00
                     // Día
                     colorInicio = '#87CEEB';
                     colorFin = '#E0F7FA';
-                } else if (hora >= 16 && hora < 19) {
+                } else if (hora >= atardecer - 2 && hora < atardecer + 1) {  // 16:00-19:00
                     // Atardecer
                     colorInicio = '#FF9800';
                     colorFin = '#1a2980';
