@@ -48,7 +48,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 1; /* Aumentado para que los meteoritos estén por encima */
             pointer-events: none;
         }
 
@@ -106,10 +106,130 @@
             100% { opacity: 1; }
         }
 
+        /* ============ METEORITOS MEJORADOS ============ */
+        .meteorito {
+            position: absolute;
+            width: 12px; /* AUMENTADO de 4px */
+            height: 12px; /* AUMENTADO de 4px */
+            background: radial-gradient(circle, #ffffff 0%, #4fc3f7 70%, #0288d1 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 15px 3px rgba(255, 255, 255, 0.9),
+                0 0 30px 6px rgba(79, 195, 247, 0.7),
+                inset 0 0 10px rgba(255, 255, 255, 0.8);
+            z-index: 20; /* AUMENTADO para estar por encima */
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .meteorito:hover {
+            transform: scale(1.5);
+            box-shadow: 
+                0 0 20px 5px rgba(255, 255, 255, 1),
+                0 0 40px 10px rgba(79, 195, 247, 0.9),
+                inset 0 0 15px rgba(255, 255, 255, 1);
+        }
+
+        .meteorito.estrella-fugaz {
+            width: 6px; /* AUMENTADO de 3px */
+            height: 40px; /* AUMENTADO de 15px */
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: linear-gradient(to bottom, #ffffff 0%, #4fc3f7 40%, #0288d1 100%);
+            box-shadow: 
+                0 0 20px 5px rgba(255, 255, 255, 0.9),
+                0 0 40px 8px rgba(79, 195, 247, 0.8);
+            animation: caerEstrella linear forwards;
+        }
+
+        /* Meteorito diurno (menos visible) */
+        .meteorito.diurno {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(79, 195, 247, 0.8) 70%, rgba(2, 136, 209, 0.7) 100%);
+            box-shadow: 
+                0 0 10px 2px rgba(255, 255, 255, 0.7),
+                0 0 20px 4px rgba(79, 195, 247, 0.5),
+                inset 0 0 8px rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .meteorito.diurno.estrella-fugaz {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(79, 195, 247, 0.7) 40%, rgba(2, 136, 209, 0.6) 100%);
+            box-shadow: 
+                0 0 15px 3px rgba(255, 255, 255, 0.7),
+                0 0 30px 6px rgba(79, 195, 247, 0.6);
+        }
+
+        @keyframes caerEstrella {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(45deg);
+                opacity: 1;
+            }
+            70% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============ EXPLOSIÓN DE CORAZONES ============ */
+        .corazon-explosion {
+            position: absolute;
+            font-size: 36px; /* Aumentado */
+            color: #ff5252;
+            z-index: 100; /* Muy alto para estar encima de todo */
+            pointer-events: none;
+            animation: explotarCorazon 1s ease-out forwards;
+            text-shadow: 
+                0 0 15px rgba(255, 82, 82, 0.9),
+                0 0 30px rgba(255, 82, 82, 0.7);
+            filter: drop-shadow(0 0 10px rgba(255, 82, 82, 0.8));
+        }
+
+        @keyframes explotarCorazon {
+            0% {
+                transform: scale(0.1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.8) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Partículas de corazón */
+        .particula-corazon {
+            position: absolute;
+            font-size: 24px; /* Aumentado */
+            color: #ff5252;
+            z-index: 90;
+            pointer-events: none;
+            animation: volarParticula 1.5s ease-out forwards;
+            text-shadow: 0 0 8px rgba(255, 82, 82, 0.8);
+            filter: drop-shadow(0 0 5px rgba(255, 82, 82, 0.6));
+        }
+
+        @keyframes volarParticula {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
         /* Capa de transparencia para el contenido */
         #contenidoWrapper {
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Menor que los meteoritos */
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
@@ -322,7 +442,7 @@
             transform: translateY(0);
         }
         
-        /* EL SOBRE (CONTENEDOR) - Color rojo elegante */
+        /* EL SOBRE (CONTENEDOR) - Color rojo elegante CON EFECTOS MEJORADOS */
         .envelope {
             width: 200px;
             height: 100px;
@@ -338,19 +458,64 @@
             cursor: pointer;
             border-radius: 2px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Efecto de pulso (punto 1b) */
+            animation: sobrePulse 4s infinite;
         }
         
+        /* Punto 1a: Efecto glow intensificado al pasar el cursor */
         .envelope:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 
-                0 0 1px rgba(0,0,0,0.3),
-                0 6px 25px rgba(0,0,0,0.3),
-                0 20px 50px rgba(255, 82, 82, 0.35),
-                0 0 100px rgba(255, 82, 82, 0.2);
+                0 0 5px rgba(255, 82, 82, 0.8),
+                0 10px 40px rgba(0,0,0,0.4),
+                0 25px 70px rgba(255, 82, 82, 0.5),
+                0 0 150px rgba(255, 82, 82, 0.4);
+            animation: sobreGlow 0.8s infinite alternate;
         }
         
         .envelope:active {
-            transform: translateY(0);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 
+                0 0 10px rgba(255, 82, 82, 1),
+                0 8px 30px rgba(0,0,0,0.5),
+                0 20px 60px rgba(255, 82, 82, 0.6),
+                0 0 120px rgba(255, 82, 82, 0.5);
+        }
+        
+        /* Animación de pulso (punto 1b) */
+        @keyframes sobrePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 1px rgba(0,0,0,0.3),
+                    0 4px 20px rgba(0,0,0,0.25),
+                    0 15px 40px rgba(255, 82, 82, 0.3),
+                    0 0 80px rgba(255, 82, 82, 0.15);
+            }
+            50% {
+                box-shadow: 
+                    0 0 2px rgba(255, 82, 82, 0.4),
+                    0 4px 25px rgba(0,0,0,0.3),
+                    0 15px 45px rgba(255, 82, 82, 0.4),
+                    0 0 90px rgba(255, 82, 82, 0.2);
+            }
+        }
+        
+        /* Efecto glow al hover (punto 1a intensificado) */
+        @keyframes sobreGlow {
+            0% {
+                box-shadow: 
+                    0 0 5px rgba(255, 82, 82, 0.8),
+                    0 10px 40px rgba(0,0,0,0.4),
+                    0 25px 70px rgba(255, 82, 82, 0.5),
+                    0 0 150px rgba(255, 82, 82, 0.4);
+            }
+            100% {
+                box-shadow: 
+                    0 0 8px rgba(255, 82, 82, 1),
+                    0 10px 45px rgba(0,0,0,0.5),
+                    0 25px 80px rgba(255, 82, 82, 0.7),
+                    0 0 180px rgba(255, 82, 82, 0.6);
+            }
         }
         
         .envelope:after {
@@ -410,18 +575,6 @@
         .envelope.closing-step4 .flap.top {
             animation-name: flip-reverse;
             animation-delay: 0s;
-        }
-        
-        .envelope .flap.top:after {
-            content: '';
-            position: absolute;
-            left: -100px;
-            top: -55px;
-            width: 100%;
-            height: 0;
-            border: 0 solid transparent;
-            border-width: 54px 100px;
-            border-top-color: #d33b3b;
         }
         
         .envelope.letter-open .flap.top {
@@ -688,11 +841,11 @@
             }
             
             .envelope:hover {
-                transform: scale(1.3) translateY(-2px);
+                transform: scale(1.3) translateY(-5px) scale(1.02);
             }
             
             .envelope:active {
-                transform: scale(1.3) translateY(0);
+                transform: scale(1.3) translateY(-2px) scale(1.01);
             }
             
             .letter-content {
@@ -802,6 +955,17 @@
                 max-width: 180px;
                 padding: 8px 12px;
             }
+            
+            /* Ajustes meteoritos móvil - AUMENTADOS */
+            .meteorito {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .meteorito.estrella-fugaz {
+                width: 8px;
+                height: 50px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -818,11 +982,11 @@
             }
             
             .envelope:hover {
-                transform: scale(1.2) translateY(-2px);
+                transform: scale(1.2) translateY(-5px) scale(1.02);
             }
             
             .envelope:active {
-                transform: scale(1.2) translateY(0);
+                transform: scale(1.2) translateY(-2px) scale(1.01);
             }
             
             .letter-content {
@@ -886,6 +1050,17 @@
                 max-width: 160px;
                 padding: 6px 10px;
             }
+            
+            /* Ajustes meteoritos móvil muy pequeños */
+            .meteorito {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .meteorito.estrella-fugaz {
+                width: 7px;
+                height: 40px;
+            }
         }
         
         /* Media query solo para escritorio (más de 768px) */
@@ -906,6 +1081,7 @@
         <div id="sol"></div>
         <div id="luna"></div>
         <div id="estrellasContainer"></div>
+        <!-- Los meteoritos se generarán aquí dinámicamente -->
     </div>
     
     <!-- Contenedor para el contenido principal -->
@@ -976,6 +1152,11 @@
     </audio>
     <audio id="song3" preload="auto">
         <source src="https://ionut5251.github.io/Notitas/cancionadore.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Audio para efecto de explosión (oculto) -->
+    <audio id="explosionSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-explosion-2759.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -1117,6 +1298,10 @@
                 }
                 
                 document.body.style.background = `linear-gradient(to bottom, ${colorInicio}, ${colorFin})`;
+                
+                // Controlar meteoritos - MODIFICADO: siempre activos pero con diferente frecuencia
+                const esNoche = hora < amanecer || hora >= atardecer;
+                controlarMeteoritos(esNoche);
             }
             
             // Crear estrellas aleatorias
@@ -1145,6 +1330,189 @@
                     
                     container.appendChild(estrella);
                 }
+            }
+            
+            // ==============================================
+            // SISTEMA DE METEORITOS MEJORADO
+            // ==============================================
+            
+            let meteoritosActivos = false;
+            let intervaloMeteoritos;
+            let esNocheActual = false;
+            
+            function controlarMeteoritos(esNoche) {
+                esNocheActual = esNoche;
+                
+                if (!meteoritosActivos) {
+                    // Activar meteoritos siempre (día y noche)
+                    meteoritosActivos = true;
+                    crearMeteoritos();
+                    
+                    // Diferente frecuencia según sea de día o de noche
+                    const intervalo = esNoche ? 8000 : 15000; // Noche: 8 seg, Día: 15 seg
+                    intervaloMeteoritos = setInterval(crearMeteoritoIndividual, intervalo);
+                    
+                    console.log(`🌠 Meteoritos activados: ${esNoche ? 'Noche (cada 8s)' : 'Día (cada 15s)'}`);
+                    console.log('👉 ¡Haz clic en los meteoritos para ver la explosión de corazones!');
+                } else {
+                    // Actualizar frecuencia si cambió de día a noche o viceversa
+                    clearInterval(intervaloMeteoritos);
+                    const intervalo = esNoche ? 8000 : 15000;
+                    intervaloMeteoritos = setInterval(crearMeteoritoIndividual, intervalo);
+                    console.log(`🌠 Frecuencia de meteoritos actualizada: ${esNoche ? 'Noche (cada 8s)' : 'Día (cada 15s)'}`);
+                }
+            }
+            
+            function crearMeteoritos() {
+                // Crear algunos meteoritos iniciales inmediatamente
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        crearMeteoritoIndividual();
+                    }, i * 1000); // Uno cada segundo al inicio
+                }
+            }
+            
+            function crearMeteoritoIndividual() {
+                if (!meteoritosActivos) return;
+                
+                const cieloContainer = document.getElementById('cieloContainer');
+                const meteorito = document.createElement('div');
+                
+                // Determinar si es de día o noche para el estilo
+                if (esNocheActual) {
+                    meteorito.className = 'meteorito estrella-fugaz';
+                } else {
+                    meteorito.className = 'meteorito estrella-fugaz diurno';
+                }
+                
+                // Posición inicial aleatoria en la parte superior
+                const inicioX = Math.random() * 100;
+                meteorito.style.left = inicioX + '%';
+                meteorito.style.top = '-50px';
+                
+                // Duración aleatoria de la animación (más lenta)
+                const duracion = Math.random() * 3 + 2; // 2-5 segundos
+                meteorito.style.animationDuration = duracion + 's';
+                
+                // Añadir evento de click/touch
+                meteorito.addEventListener('click', explotarMeteorito);
+                meteorito.addEventListener('touchstart', explotarMeteorito);
+                
+                // Asegurar que el meteorito sea visible
+                meteorito.style.pointerEvents = 'auto';
+                meteorito.style.cursor = 'pointer';
+                
+                cieloContainer.appendChild(meteorito);
+                
+                // Log para depuración
+                console.log(`☄️ Meteorito creado en ${inicioX}% - Duración: ${duracion}s - Tipo: ${esNocheActual ? 'Nocturno' : 'Diurno'}`);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    if (meteorito.parentNode) {
+                        meteorito.parentNode.removeChild(meteorito);
+                        console.log(`🗑️ Meteorito eliminado (posición: ${inicioX}%)`);
+                    }
+                }, duracion * 1000);
+            }
+            
+            function eliminarMeteoritos() {
+                const meteoritos = document.querySelectorAll('.meteorito');
+                meteoritos.forEach(meteorito => {
+                    if (meteorito.parentNode) {
+                        meteorito.parentNode.removeChild(meteorito);
+                    }
+                });
+            }
+            
+            function explotarMeteorito(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const meteorito = event.target;
+                const rect = meteorito.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                console.log('💥 ¡Meteorito clickeado! Explotando en:', x, y);
+                
+                // Reproducir sonido de explosión
+                const explosionSound = document.getElementById('explosionSound');
+                explosionSound.currentTime = 0;
+                explosionSound.volume = 0.3;
+                explosionSound.play().catch(e => console.log("Error al reproducir sonido:", e));
+                
+                // Crear explosión de corazón principal
+                const explosion = document.createElement('div');
+                explosion.className = 'corazon-explosion';
+                explosion.innerHTML = '❤️';
+                explosion.style.left = x + 'px';
+                explosion.style.top = y + 'px';
+                
+                document.body.appendChild(explosion);
+                
+                // Crear partículas de corazón
+                const numParticulas = 12;
+                for (let i = 0; i < numParticulas; i++) {
+                    setTimeout(() => {
+                        const particula = document.createElement('div');
+                        particula.className = 'particula-corazon';
+                        particula.innerHTML = '❤️';
+                        particula.style.left = x + 'px';
+                        particula.style.top = y + 'px';
+                        
+                        // Dirección aleatoria
+                        const angulo = Math.random() * Math.PI * 2;
+                        const distancia = 60 + Math.random() * 120;
+                        const tx = Math.cos(angulo) * distancia;
+                        const ty = Math.sin(angulo) * distancia;
+                        
+                        particula.style.setProperty('--tx', tx + 'px');
+                        particula.style.setProperty('--ty', ty + 'px');
+                        
+                        document.body.appendChild(particula);
+                        
+                        // Eliminar partícula después de la animación
+                        setTimeout(() => {
+                            if (particula.parentNode) {
+                                particula.parentNode.removeChild(particula);
+                            }
+                        }, 1500);
+                    }, i * 30);
+                }
+                
+                // Eliminar meteorito
+                if (meteorito.parentNode) {
+                    meteorito.parentNode.removeChild(meteorito);
+                }
+                
+                // Eliminar explosión principal después de la animación
+                setTimeout(() => {
+                    if (explosion.parentNode) {
+                        explosion.parentNode.removeChild(explosion);
+                    }
+                }, 1000);
+                
+                // Mostrar notificación
+                showNotification("¡Meteorito convertido en amor! ❤️");
+            }
+            
+            // Función para forzar la creación de un meteorito (para pruebas)
+            window.crearMeteoritoTest = function() {
+                crearMeteoritoIndividual();
+                console.log("✅ Meteorito de prueba creado - ¡Haz clic en él!");
+                showNotification("Meteorito de prueba creado");
+            }
+            
+            // Función para crear múltiples meteoritos de prueba
+            window.crearLluviaMeteoritos = function(cantidad = 5) {
+                for (let i = 0; i < cantidad; i++) {
+                    setTimeout(() => {
+                        crearMeteoritoIndividual();
+                    }, i * 300);
+                }
+                console.log(`✅ ${cantidad} meteoritos de prueba creados`);
+                showNotification(`Lluvia de ${cantidad} meteoritos creada`);
             }
             
             // ==============================================
@@ -1672,11 +2040,19 @@
                 // Mostrar información en consola
                 console.log('🎵 REPRODUCTOR DE MÚSICA - 3 canciones');
                 console.log('🌞 SISTEMA DE SOL Y LUNA ACTIVO');
+                console.log('☄️ SISTEMA DE METEORITOS ACTIVO (día y noche)');
+                console.log('   - Noche (18:00-6:00): Meteorito cada 8 segundos');
+                console.log('   - Día (6:00-18:00): Meteorito cada 15 segundos');
+                console.log('💥 ¡Haz clic en los meteoritos para convertirlos en corazones!');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
                 console.log('• Para ver estadísticas: verEstadisticas()');
+                console.log('• Para crear meteorito de prueba: crearMeteoritoTest()');
+                console.log('• Para crear lluvia de meteoritos: crearLluviaMeteoritos(10)');
                 
                 // Hacer funciones accesibles desde consola
                 window.verEstadisticas = verEstadisticas;
+                window.crearMeteoritoTest = crearMeteoritoTest;
+                window.crearLluviaMeteoritos = crearLluviaMeteoritos;
             }
             
             // Iniciar cuando el DOM esté listo
