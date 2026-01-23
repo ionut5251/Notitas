@@ -5,20 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Especial</title>
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZZPNBD62R"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XZZPNBD62R', {
-            'page_title': 'Sobre Especial',
-            'page_location': window.location.href,
-            'page_path': window.location.pathname
-        });
-    </script>
-    <!-- Fin Google Analytics -->
-    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Importar fuente Pacifico de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
@@ -39,17 +25,97 @@
             touch-action: manipulation;
             height: 100%;
             overflow-x: hidden;
+            overflow-y: auto;
         }
         
+        /* FONDO DEL CIELO (implementación del sol y la luna) */
         body {
             font-family: 'Arial', sans-serif;
-            background: #1c258b; /* Azul profundo que contrasta bien con el rojo */
+            background: linear-gradient(to bottom, #1a2980, #26d0ce); /* Gradiente azul más neutro */
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Contenedor del cielo */
+        #cieloContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Sol y luna - versión simplificada para fondo */
+        #sol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            background: radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, #ff5722 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 80px rgba(255, 235, 59, 0.7), 0 0 200px rgba(255, 152, 0, 0.4);
+            z-index: 1;
+            opacity: 0.9;
+            transition: all 2s ease;
+        }
+
+        #luna {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            margin: -60px 0 0 -60px;
+            background: radial-gradient(circle, #e0f7fa 0%, #b2ebf2 40%, #80deea 70%, #4dd0e1 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(224, 247, 250, 0.6), 0 0 150px rgba(178, 235, 242, 0.3);
+            z-index: 1;
+            opacity: 0;
+            transition: all 2s ease;
+        }
+
+        #estrellasContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .estrella {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Capa de transparencia para el contenido */
+        #contenidoWrapper {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         #wrapper {
@@ -104,13 +170,12 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
         }
         
-        /* Reproductor de música avanzado - MÁS PEQUEÑO */
+        /* Reproductor de música - AJUSTADO PARA PC */
         .music-player {
-            position: fixed; /* Cambiado de 'relative' a 'fixed' */
-            bottom: 80px; /* Posicionado desde la parte inferior */
+            position: fixed;
+            bottom: 20px; /* MUCHO MÁS ABAJO en PC */
             left: 50%;
             transform: translateX(-50%);
-            margin: 0; /* Eliminamos el margen superior */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 12px;
@@ -119,32 +184,32 @@
             max-width: 300px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none; /* OCULTO POR DEFECTO */
-            z-index: 100; /* Asegurar que esté por encima */
+            display: none;
+            z-index: 100;
         }
         
         .song-selector {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px; /* REDUCIDO de 15px a 10px */
-            gap: 6px; /* REDUCIDO de 10px a 6px */
+            margin-bottom: 10px;
+            gap: 6px;
         }
         
         .song-btn {
             flex: 1;
-            padding: 6px 8px; /* REDUCIDO de 8px 12px a 6px 8px */
+            padding: 6px 8px;
             background: rgba(255, 82, 82, 0.8);
             border: none;
-            border-radius: 20px; /* REDUCIDO de 25px a 20px */
+            border-radius: 20px;
             color: white;
             font-family: 'Pacifico', cursive;
-            font-size: 12px; /* REDUCIDO de 14px a 12px */
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px; /* REDUCIDO de 8px a 5px */
+            gap: 5px;
         }
         
         .song-btn:hover {
@@ -155,19 +220,19 @@
         .song-btn.active {
             background: #ffeb3b;
             color: #1c258b;
-            box-shadow: 0 2px 10px rgba(255, 235, 59, 0.4); /* REDUCIDO de 4px a 2px */
+            box-shadow: 0 2px 10px rgba(255, 235, 59, 0.4);
         }
         
         .player-controls {
             display: flex;
             align-items: center;
-            gap: 10px; /* REDUCIDO de 15px a 10px */
-            margin-bottom: 8px; /* REDUCIDO de 10px a 8px */
+            gap: 10px;
+            margin-bottom: 8px;
         }
         
         .play-pause-btn {
-            width: 35px; /* REDUCIDO de 40px a 35px */
-            height: 35px; /* REDUCIDO de 40px a 35px */
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: rgba(255, 82, 82, 0.9);
             border: none;
@@ -191,8 +256,8 @@
         
         .song-title {
             color: white;
-            font-size: 12px; /* REDUCIDO de 14px a 12px */
-            margin-bottom: 1px; /* REDUCIDO de 2px a 1px */
+            font-size: 12px;
+            margin-bottom: 1px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -200,25 +265,25 @@
         
         .song-artist {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 10px; /* REDUCIDO de 12px a 10px */
+            font-size: 10px;
         }
         
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 6px; /* REDUCIDO de 8px a 6px */
-            margin-top: 3px; /* REDUCIDO de 5px a 3px */
+            gap: 6px;
+            margin-top: 3px;
         }
         
         .volume-control i {
             color: white;
-            font-size: 14px; /* REDUCIDO de 16px a 14px */
+            font-size: 14px;
         }
         
         .volume-slider {
             flex: 1;
             -webkit-appearance: none;
-            height: 3px; /* REDUCIDO de 4px a 3px */
+            height: 3px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
             outline: none;
@@ -226,8 +291,8 @@
         
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 14px; /* REDUCIDO de 16px a 14px */
-            height: 14px; /* REDUCIDO de 16px a 14px */
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             background: #ff5252;
             cursor: pointer;
@@ -394,8 +459,8 @@
 
         /* --- ESTILOS DEL TEXTO CON FUENTE PACIFICO --- */
         .letter-content {
-            font-family: 'Pacifico', cursive; /* Fuente Pacifico moderna y redondeada */
-            font-size: 15px; /* Tamaño óptimo para Pacifico */
+            font-family: 'Pacifico', cursive;
+            font-size: 15px;
             color: #5d4037;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -404,10 +469,10 @@
             padding: 8px 10px;
             z-index: 10;
             position: relative;
-            line-height: 1.4; /* Espaciado entre líneas */
-            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1); /* Sombra sutil */
-            letter-spacing: 0.2px; /* Espaciado entre letras */
-            font-weight: normal; /* Pacifico no tiene pesos diferentes */
+            line-height: 1.4;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+            letter-spacing: 0.2px;
+            font-weight: normal;
         }
 
         /* --- EMOJIS POSICIONADOS EN EL SOBRE (NO EN LA CARTA) --- */
@@ -606,11 +671,15 @@
             50% { transform: translateX(-50%) translateY(3px); }
         }
         
-        /* Media queries para móvil - REPRODUCTOR AÚN MÁS PEQUEÑO */
+        /* Media queries para móvil - CONFIGURACIÓN SEPARADA */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
-                background: #1a237e;
+                background: linear-gradient(to bottom, #1a237e, #2196F3);
+            }
+            
+            #contenidoWrapper {
+                padding: 15px;
             }
             
             .envelope {
@@ -627,7 +696,7 @@
             }
             
             .letter-content {
-                font-size: 16px; /* Un poco más grande en móvil */
+                font-size: 16px;
                 padding: 6px 8px;
             }
             
@@ -641,11 +710,11 @@
             
             /* Ajustar posición del emoji superior para que no se salga */
             .emoji-top {
-                top: -28px; /* Reducido de -35px a -28px */
+                top: -28px;
             }
             
             .emoji-bottom {
-                bottom: -28px; /* Reducido de -35px a -28px */
+                bottom: -28px;
             }
             
             /* Ajustar las animaciones para la nueva posición */
@@ -669,88 +738,79 @@
                 font-size: 20px;
             }
             
-            .music-notification {
-                bottom: 70px;
-                right: 15px;
-                font-size: 12px;
-                max-width: 180px;
-                padding: 8px 12px;
-            }
-            
-            /* Ajustes ESPECIALES para el reproductor en móvil - MÁS COMPACTO */
+            /* REPRODUCTOR DE MÚSICA - POSICIÓN DIFERENTE EN MÓVIL */
             .music-player {
-                position: fixed; /* Mantener fixed en móvil */
-                bottom: 70px; /* Un poco más arriba en móvil */
-                left: 50%;
-                transform: translateX(-50%);
-                margin: 0; /* Sin margen */
-                padding: 8px;
-                width: 95%;
+                bottom: 70px !important; /* MÁS ARRIBA en móvil */
                 max-width: 280px;
+                padding: 8px;
                 border-radius: 10px;
-            }
-            
-            /* Ajustar la notificación para que no se solape */
-            .music-notification {
-                bottom: 120px; /* Más arriba para no solapar con reproductor */
-                right: 15px;
-                font-size: 12px;
-                max-width: 180px;
-                padding: 8px 12px;
             }
             
             .song-selector {
                 flex-direction: column;
                 gap: 6px;
-                margin-bottom: 8px; /* MÁS REDUCIDO: de 10px a 8px */
+                margin-bottom: 8px;
             }
             
             .song-btn {
-                padding: 8px; /* MÁS REDUCIDO: de 10px a 8px */
-                font-size: 11px; /* MÁS REDUCIDO: de 13px a 11px */
-                border-radius: 18px; /* MÁS REDUCIDO: de 20px a 18px */
+                padding: 8px;
+                font-size: 11px;
+                border-radius: 18px;
             }
             
             .player-controls {
-                gap: 8px; /* MÁS REDUCIDO: de 10px a 8px */
-                margin-bottom: 6px; /* MÁS REDUCIDO: de 8px a 6px */
+                gap: 8px;
+                margin-bottom: 6px;
             }
             
             .play-pause-btn {
-                width: 32px; /* MÁS REDUCIDO: de 35px a 32px */
-                height: 32px; /* MÁS REDUCIDO: de 35px a 32px */
+                width: 32px;
+                height: 32px;
             }
             
             .song-title {
-                font-size: 11px; /* MÁS REDUCIDO: de 12px a 11px */
+                font-size: 11px;
             }
             
             .song-artist {
-                font-size: 9px; /* MÁS REDUCIDO: de 10px a 9px */
+                font-size: 9px;
             }
             
             .volume-control {
-                gap: 5px; /* MÁS REDUCIDO: de 6px a 5px */
-                margin-top: 2px; /* MÁS REDUCIDO: de 3px a 2px */
+                gap: 5px;
+                margin-top: 2px;
             }
             
             .volume-control i {
-                font-size: 12px; /* MÁS REDUCIDO: de 14px a 12px */
+                font-size: 12px;
             }
             
             .volume-slider {
-                height: 2px; /* MÁS REDUCIDO: de 3px a 2px */
+                height: 2px;
             }
             
             .volume-slider::-webkit-slider-thumb {
-                width: 12px; /* MÁS REDUCIDO: de 14px a 12px */
-                height: 12px; /* MÁS REDUCIDO: de 14px a 12px */
+                width: 12px;
+                height: 12px;
+            }
+            
+            /* Notificación de música en móvil */
+            .music-notification {
+                bottom: 120px;
+                right: 15px;
+                font-size: 12px;
+                max-width: 180px;
+                padding: 8px 12px;
             }
         }
         
         @media (max-width: 480px) {
             body {
-                padding: 10px; /* MÁS REDUCIDO para dar más espacio */
+                padding: 10px;
+            }
+            
+            #contenidoWrapper {
+                padding: 12px;
             }
             
             .envelope {
@@ -766,7 +826,7 @@
             }
             
             .letter-content {
-                font-size: 15px; /* Tamaño óptimo para pantallas muy pequeñas */
+                font-size: 15px;
             }
             
             /* Ajustar aún más para pantallas muy pequeñas */
@@ -794,6 +854,31 @@
                 font-size: 18px;
             }
             
+            /* REPRODUCTOR AÚN MÁS COMPACTO para pantallas muy pequeñas */
+            .music-player {
+                max-width: 260px;
+                padding: 6px;
+                border-radius: 8px;
+            }
+            
+            .song-btn {
+                font-size: 10px;
+                padding: 6px;
+            }
+            
+            .play-pause-btn {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .song-title {
+                font-size: 10px;
+            }
+            
+            .song-artist {
+                font-size: 8px;
+            }
+            
             .music-notification {
                 bottom: 60px;
                 right: 10px;
@@ -801,79 +886,74 @@
                 max-width: 160px;
                 padding: 6px 10px;
             }
-            
-            /* REPRODUCTOR AÚN MÁS COMPACTO para pantallas muy pequeñas */
+        }
+        
+        /* Media query solo para escritorio (más de 768px) */
+        @media (min-width: 769px) {
             .music-player {
-                margin: 3px auto 0; /* MÍNIMO: 3px de margen superior */
-                padding: 6px; /* MÍNIMO: 6px de padding */
-                max-width: 260px; /* MÁS REDUCIDO: de 280px a 260px */
-                border-radius: 8px; /* MÁS REDUCIDO: de 10px a 8px */
+                bottom: 20px; /* ABAJO DEL TODO en PC */
             }
             
-            .song-btn {
-                font-size: 10px; /* MÁS REDUCIDO: de 11px a 10px */
-                padding: 6px; /* MÁS REDUCIDO: de 8px a 6px */
-            }
-            
-            .play-pause-btn {
-                width: 30px; /* MÁS REDUCIDO: de 32px a 30px */
-                height: 30px; /* MÁS REDUCIDO: de 32px a 30px */
-            }
-            
-            .song-title {
-                font-size: 10px; /* MÁS REDUCIDO: de 11px a 10px */
-            }
-            
-            .song-artist {
-                font-size: 8px; /* MÁS REDUCIDO: de 9px a 8px */
+            .music-notification {
+                bottom: 80px; /* Justo arriba del botón de música */
             }
         }
     </style>
 </head>
 <body>
-    <div id="wrapper">
-        <div class="envelope">
-            <div class="flap front"></div>
-            <div class="flap top"></div>
-            <div class="letter">
-                <div class="letter-content" id="texto-carta"></div>
+    <!-- Contenedor del cielo con sol y luna -->
+    <div id="cieloContainer">
+        <div id="sol"></div>
+        <div id="luna"></div>
+        <div id="estrellasContainer"></div>
+    </div>
+    
+    <!-- Contenedor para el contenido principal -->
+    <div id="contenidoWrapper">
+        <div id="wrapper">
+            <div class="envelope">
+                <div class="flap front"></div>
+                <div class="flap top"></div>
+                <div class="letter">
+                    <div class="letter-content" id="texto-carta"></div>
+                </div>
+                <!-- Contenedor para los emojis, fuera de la carta pero dentro del sobre -->
+                <div class="emoji-container">
+                    <div class="emoji-top" id="emoji-top"></div>
+                    <div class="emoji-bottom" id="emoji-bottom"></div>
+                </div>
             </div>
-            <!-- Contenedor para los emojis, fuera de la carta pero dentro del sobre -->
-            <div class="emoji-container">
-                <div class="emoji-top" id="emoji-top"></div>
-                <div class="emoji-bottom" id="emoji-bottom"></div>
+        </div>
+    </div>
+    
+    <!-- Reproductor de música (INICIALMENTE OCULTO) -->
+    <div class="music-player" id="musicPlayer">
+        <div class="song-selector">
+            <button class="song-btn" data-song="1">
+                <i class="fas fa-music"></i> Sonríe
+            </button>
+            <button class="song-btn" data-song="2">
+                <i class="fas fa-heart"></i> Love
+            </button>
+            <button class="song-btn" data-song="3">
+                <i class="fas fa-star"></i> I Adore You
+            </button>
+        </div>
+        
+        <div class="player-controls">
+            <button class="play-pause-btn" id="playPauseBtn">
+                <i class="fas fa-play"></i>
+            </button>
+            <div class="song-info">
+                <div class="song-title" id="currentSongTitle">Selecciona una canción</div>
+                <div class="song-artist" id="currentSongArtist">Tu música especial</div>
             </div>
         </div>
         
-        <!-- Reproductor de música (INICIALMENTE OCULTO y MÁS PEQUEÑO) -->
-        <div class="music-player" id="musicPlayer">
-            <div class="song-selector">
-                <button class="song-btn" data-song="1">
-                    <i class="fas fa-music"></i> Sonríe
-                </button>
-                <button class="song-btn" data-song="2">
-                    <i class="fas fa-heart"></i> Love
-                </button>
-                <button class="song-btn" data-song="3">
-                    <i class="fas fa-star"></i> I Adore You
-                </button>
-            </div>
-            
-            <div class="player-controls">
-                <button class="play-pause-btn" id="playPauseBtn">
-                    <i class="fas fa-play"></i>
-                </button>
-                <div class="song-info">
-                    <div class="song-title" id="currentSongTitle">Selecciona una canción</div>
-                    <div class="song-artist" id="currentSongArtist">Tu música especial</div>
-                </div>
-            </div>
-            
-            <div class="volume-control">
-                <i class="fas fa-volume-down"></i>
-                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
-                <i class="fas fa-volume-up"></i>
-            </div>
+        <div class="volume-control">
+            <i class="fas fa-volume-down"></i>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+            <i class="fas fa-volume-up"></i>
         </div>
     </div>
     
@@ -900,13 +980,184 @@
 
     <script>
         $(document).ready(function() {
+            // ==============================================
+            // SISTEMA DE SOL Y LUNA SEGÚN LA HORA
+            // ==============================================
+            
+            function actualizarCielo() {
+                const ahora = new Date();
+                const hora = ahora.getHours();
+                const minuto = ahora.getMinutes();
+                const segundo = ahora.getSeconds();
+                
+                // Calcular el porcentaje del día (0 = medianoche, 0.5 = mediodía, 1 = medianoche siguiente)
+                const totalSegundos = hora * 3600 + minuto * 60 + segundo;
+                const porcentajeDia = totalSegundos / 86400; // 86400 segundos en un día
+                
+                // Calcular posición del sol (6:00 AM a 6:00 PM)
+                const amanecer = 6; // 6:00 AM
+                const atardecer = 18; // 6:00 PM
+                
+                const sol = document.getElementById('sol');
+                const luna = document.getElementById('luna');
+                const estrellas = document.getElementById('estrellasContainer');
+                
+                if (hora >= amanecer && hora < atardecer) {
+                    // ES DE DÍA
+                    const duracionDia = atardecer - amanecer;
+                    const horaActualDia = hora + minuto/60 - amanecer;
+                    const progresoDia = horaActualDia / duracionDia;
+                    
+                    // Posición del sol en el cielo (arco)
+                    const angulo = progresoDia * Math.PI; // 0 a π radianes
+                    const radio = 100; // Radio del movimiento
+                    
+                    // Coordenadas para el arco del sol
+                    const x = 50 + Math.sin(angulo) * 40; // 10% a 90% del ancho
+                    const y = 20 + Math.cos(angulo) * 60; // 20% a 80% de la altura
+                    
+                    // Estilo del sol
+                    sol.style.left = x + '%';
+                    sol.style.top = y + '%';
+                    
+                    // Tamaño y opacidad del sol según la hora
+                    let tamanoSol = 150;
+                    let opacidadSol = 0.9;
+                    let brilloSol = 0.7;
+                    
+                    if (hora < amanecer + 1 || hora > atardecer - 1) {
+                        // Amanecer o atardecer
+                        tamanoSol = 180;
+                        opacidadSol = 0.6;
+                        brilloSol = 0.5;
+                        sol.style.background = 'radial-gradient(circle, #ff9800 0%, #ff5722 70%, #d84315 100%)';
+                    } else if (hora >= 11 && hora <= 13) {
+                        // Mediodía
+                        tamanoSol = 130;
+                        opacidadSol = 1;
+                        brilloSol = 0.9;
+                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ffc107 70%, #ff9800 100%)';
+                    } else {
+                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, #ff5722 100%)';
+                    }
+                    
+                    sol.style.width = tamanoSol + 'px';
+                    sol.style.height = tamanoSol + 'px';
+                    sol.style.margin = '-' + (tamanoSol/2) + 'px 0 0 -' + (tamanoSol/2) + 'px';
+                    sol.style.opacity = opacidadSol;
+                    sol.style.boxShadow = '0 0 ' + (tamanoSol/2) + 'px rgba(255, 235, 59, ' + brilloSol + '), 0 0 ' + (tamanoSol*1.5) + 'px rgba(255, 152, 0, 0.4)';
+                    
+                    // Mostrar sol, ocultar luna y estrellas
+                    sol.style.display = 'block';
+                    luna.style.display = 'none';
+                    estrellas.style.opacity = 0;
+                    
+                } else {
+                    // ES DE NOCHE
+                    let duracionNoche;
+                    let horaActualNoche;
+                    
+                    if (hora < amanecer) {
+                        duracionNoche = amanecer + (24 - atardecer);
+                        horaActualNoche = hora + 24 - atardecer;
+                    } else {
+                        duracionNoche = amanecer + (24 - atardecer);
+                        horaActualNoche = hora - atardecer;
+                    }
+                    
+                    const progresoNoche = horaActualNoche / duracionNoche;
+                    const angulo = progresoNoche * Math.PI;
+                    
+                    // Coordenadas para el arco de la luna
+                    const x = 50 + Math.sin(angulo) * 40;
+                    const y = 20 + Math.cos(angulo) * 60;
+                    
+                    // Estilo de la luna
+                    luna.style.left = x + '%';
+                    luna.style.top = y + '%';
+                    
+                    // Tamaño y opacidad de la luna según la hora
+                    const tamanoLuna = 120;
+                    const opacidadLuna = 0.8 - Math.abs(12 - hora) * 0.05;
+                    const brilloLuna = 0.6 - Math.abs(12 - hora) * 0.05;
+                    
+                    luna.style.width = tamanoLuna + 'px';
+                    luna.style.height = tamanoLuna + 'px';
+                    luna.style.margin = '-' + (tamanoLuna/2) + 'px 0 0 -' + (tamanoLuna/2) + 'px';
+                    luna.style.opacity = Math.max(0.3, opacidadLuna);
+                    luna.style.boxShadow = '0 0 ' + (tamanoLuna/2) + 'px rgba(224, 247, 250, ' + brilloLuna + '), 0 0 ' + (tamanoLuna*1.5) + 'px rgba(178, 235, 242, 0.3)';
+                    
+                    // Mostrar luna y estrellas, ocultar sol
+                    sol.style.display = 'none';
+                    luna.style.display = 'block';
+                    
+                    // Estrellas - más visibles cuanto más tarde/antes sea
+                    const opacidadEstrellas = 0.1 + Math.abs(0 - hora) * 0.03;
+                    estrellas.style.opacity = Math.min(0.8, opacidadEstrellas);
+                }
+                
+                // Actualizar fondo del body según la hora
+                let colorInicio, colorFin;
+                
+                if (hora >= 5 && hora < 8) {
+                    // Amanecer
+                    colorInicio = '#1a2980';
+                    colorFin = '#26d0ce';
+                } else if (hora >= 8 && hora < 16) {
+                    // Día
+                    colorInicio = '#87CEEB';
+                    colorFin = '#E0F7FA';
+                } else if (hora >= 16 && hora < 19) {
+                    // Atardecer
+                    colorInicio = '#FF9800';
+                    colorFin = '#1a2980';
+                } else {
+                    // Noche
+                    colorInicio = '#0A192F';
+                    colorFin = '#1a2980';
+                }
+                
+                document.body.style.background = `linear-gradient(to bottom, ${colorInicio}, ${colorFin})`;
+            }
+            
+            // Crear estrellas aleatorias
+            function crearEstrellas() {
+                const container = document.getElementById('estrellasContainer');
+                container.innerHTML = '';
+                
+                for (let i = 0; i < 100; i++) {
+                    const estrella = document.createElement('div');
+                    estrella.className = 'estrella';
+                    
+                    // Tamaño aleatorio entre 1 y 3px
+                    const tamaño = Math.random() * 2 + 1;
+                    estrella.style.width = tamaño + 'px';
+                    estrella.style.height = tamaño + 'px';
+                    
+                    // Posición aleatoria
+                    estrella.style.left = Math.random() * 100 + '%';
+                    estrella.style.top = Math.random() * 100 + '%';
+                    
+                    // Opacidad aleatoria
+                    estrella.style.opacity = Math.random() * 0.7 + 0.3;
+                    
+                    // Retraso de animación aleatorio
+                    estrella.style.animationDelay = Math.random() * 3 + 's';
+                    
+                    container.appendChild(estrella);
+                }
+            }
+            
+            // ==============================================
+            // SISTEMA DE LA CARTA (sin cambios)
+            // ==============================================
+            
             let sobreAbierto = false;
             let animando = false;
             let animacionAbiertaCompleta = false;
             let mensajesSeguidos = 0;
             let ultimoMensajeTiempo = 0;
             
-            // --- LÓGICA DE TEXTOS ALEATORIOS CON EMOJIS ASIGNADOS ---
             const textosConEmojis = [
                 {
                     texto: "Keep shining!",
@@ -990,30 +1241,24 @@
                 }
             ];
             
-            // Copia de la lista para ir quitando los que ya salieron
             let textosDisponibles = [...textosConEmojis];
 
             function obtenerTextoYEmojiAleatorio() {
-                // Si nos quedamos sin textos, reiniciamos la lista
                 if (textosDisponibles.length === 0) {
                     textosDisponibles = [...textosConEmojis];
                 }
                 
-                // Elegimos un índice al azar de los disponibles
                 const indice = Math.floor(Math.random() * textosDisponibles.length);
-                // Extraemos el texto y emoji de la lista (sacándolo con splice)
                 const textoElegido = textosDisponibles.splice(indice, 1)[0];
                 
                 return textoElegido;
             }
             
-            // Función simplificada para mensajes seguidos
             function verificarMensajesSeguidos() {
                 const ahora = Date.now();
                 
                 if (ahora - ultimoMensajeTiempo < 10000) {
                     mensajesSeguidos++;
-                    console.log(`📊 Mensajes seguidos: ${mensajesSeguidos}`);
                 } else {
                     mensajesSeguidos = 0;
                 }
@@ -1033,14 +1278,6 @@
                 $('#emoji-bottom').text(contenido.emoji);
                 
                 verificarMensajesSeguidos();
-                
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'sobre_abierto', {
-                        'event_category': 'interaccion',
-                        'event_label': contenido.texto,
-                        'value': 1
-                    });
-                }
                 
                 registrarVisitaLocal(contenido.texto, contenido.emoji);
                 
@@ -1108,7 +1345,7 @@
             });
             
             // ==============================================
-            // SISTEMA DE MÚSICA AVANZADO
+            // SISTEMA DE MÚSICA AVANZADO (con ajuste de posición)
             // ==============================================
             
             const songs = [
@@ -1151,14 +1388,6 @@
                 $('#currentSongTitle').text(currentSong.title);
                 $('#currentSongArtist').text(currentSong.artist);
                 
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'cancion_cambiada', {
-                        'event_category': 'musica',
-                        'event_label': currentSong.title,
-                        'value': songIndex
-                    });
-                }
-                
                 if (isPlaying) {
                     currentSong.element.currentTime = 0;
                     currentSong.element.play().then(() => {
@@ -1179,24 +1408,10 @@
                     currentSong.element.pause();
                     playPauseIcon.removeClass('fa-pause').addClass('fa-play');
                     showNotification("Música pausada");
-                    
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'musica_pausada', {
-                            'event_category': 'musica',
-                            'event_label': currentSong.title
-                        });
-                    }
                 } else {
                     currentSong.element.play().then(() => {
                         playPauseIcon.removeClass('fa-play').addClass('fa-pause');
                         showNotification(`Reproduciendo: ${currentSong.title}`);
-                        
-                        if (typeof gtag !== 'undefined') {
-                            gtag('event', 'musica_iniciada', {
-                                'event_category': 'musica',
-                                'event_label': currentSong.title
-                            });
-                        }
                     }).catch(error => {
                         console.log("Error al reproducir:", error);
                         showNotification("Haz clic en el sobre primero para activar la música");
@@ -1299,18 +1514,12 @@
                 e.stopPropagation();
                 
                 if ($('#musicPlayer').is(':visible')) {
-                    $('#musicPlayer').slideUp(200); /* Animación más rápida */
+                    $('#musicPlayer').slideUp(200);
                 } else {
-                    $('#musicPlayer').slideDown(200); /* Animación más rápida */
+                    $('#musicPlayer').slideDown(200);
                 }
                 
                 $(this).toggleClass('pulsing');
-                
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'reproductor_toggle', {
-                        'event_category': 'interfaz'
-                    });
-                }
                 
                 return false;
             });
@@ -1364,7 +1573,7 @@
             });
             
             // ==============================================
-            // SISTEMA DE REGISTRO LOCAL DE VISITAS
+            // SISTEMA DE REGISTRO LOCAL DE VISITAS (simplificado)
             // ==============================================
             
             async function registrarVisitaLocal(mensaje, emoji) {
@@ -1374,36 +1583,15 @@
                         hora: new Date().toLocaleTimeString('es-ES'),
                         timestamp: Date.now(),
                         mensaje: mensaje,
-                        emoji: emoji,
-                        dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? 'móvil' : 'desktop',
-                        navegador: navigator.userAgent.substring(0, 100),
-                        ip: await obtenerIP()
+                        emoji: emoji
                     };
                     
                     console.log('📝 Registrando visita local:', visita);
                     
                     guardarVisitaLocalStorage(visita);
                     
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'mensaje_visto', {
-                            'event_category': 'contenido',
-                            'event_label': mensaje.substring(0, 30),
-                            'value': 1
-                        });
-                    }
-                    
                 } catch (error) {
                     console.error('Error al registrar visita local:', error);
-                }
-            }
-            
-            async function obtenerIP() {
-                try {
-                    const response = await fetch('https://api.ipify.org?format=json');
-                    const data = await response.json();
-                    return data.ip;
-                } catch (error) {
-                    return 'Desconocida';
                 }
             }
             
@@ -1419,48 +1607,9 @@
                     localStorage.setItem('historial_visitas', JSON.stringify(historial));
                     localStorage.setItem('ultima_visita', JSON.stringify(visita));
                     
-                    mostrarResumenLocal();
-                    
                 } catch (error) {
                     console.error('Error al guardar visita local:', error);
                 }
-            }
-            
-            function mostrarResumenLocal() {
-                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                if (historial.length > 0) {
-                    console.log(`📊 Visitando local: ${historial.length} registradas`);
-                    const hoy = new Date().toLocaleDateString('es-ES');
-                    const hoyCount = historial.filter(v => v.fecha === hoy).length;
-                    console.log(`📅 Hoy (${hoy}): ${hoyCount} visita(s)`);
-                    
-                    console.log('📝 Últimos mensajes:');
-                    historial.slice(-5).reverse().forEach((v, i) => {
-                        console.log(`   ${v.hora}: "${v.mensaje}" ${v.emoji}`);
-                    });
-                }
-            }
-            
-            function exportarDatosLocales() {
-                const historial = JSON.parse(localStorage.getItem('historial_visitas') || '[]');
-                const datos = {
-                    exportado: new Date().toISOString(),
-                    total: historial.length,
-                    visitas: historial
-                };
-                
-                const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `visitas-local-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                console.log('📁 Datos locales exportados');
-                showNotification("Datos exportados a archivo JSON");
             }
             
             function verEstadisticas() {
@@ -1486,33 +1635,34 @@
                         const num = historial.length - index;
                         console.log(`\n${num}. ${visita.fecha} - ${visita.hora}`);
                         console.log(`   💌 "${visita.mensaje}" ${visita.emoji}`);
-                        console.log(`   📱 ${visita.dispositivo}`);
-                        console.log(`   🌐 ${visita.navegador.split(' ')[0]}`);
                     });
                 }
-                
-                console.log('\n%c====================================', 'color: #ff5252; font-weight: bold');
-                console.log('📝 Usa exportarDatosLocales() para exportar');
                 
                 showNotification("Estadísticas mostradas en consola");
             }
             
-            // Inicializar todo
-            setTimeout(async function() {
+            // ==============================================
+            // INICIALIZACIÓN
+            // ==============================================
+            
+            function inicializarTodo() {
+                // Inicializar cielo
+                crearEstrellas();
+                actualizarCielo();
+                
+                // Actualizar cielo cada minuto
+                setInterval(actualizarCielo, 60000);
+                
+                // Inicializar reproductor
                 initializePlayer();
                 
+                // Registrar visita inicial
                 if (!sessionStorage.getItem('visita_registrada')) {
-                    await registrarVisitaLocal('Página cargada', '📱');
+                    registrarVisitaLocal('Página cargada', '📱');
                     sessionStorage.setItem('visita_registrada', 'true');
-                    
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'page_load', {
-                            'event_category': 'navegacion',
-                            'value': 1
-                        });
-                    }
                 }
                 
+                // Mostrar notificación inicial
                 showNotification("¡Descubre mensajes especiales!");
                 $('#musicControl').addClass('pulsing');
                 
@@ -1520,18 +1670,18 @@
                     $('#musicControl').removeClass('pulsing');
                 }, 10000);
                 
+                // Mostrar información en consola
                 console.log('🎵 REPRODUCTOR DE MÚSICA - 3 canciones');
+                console.log('🌞 SISTEMA DE SOL Y LUNA ACTIVO');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
-                console.log('• Cada mensaje se guarda en localStorage');
                 console.log('• Para ver estadísticas: verEstadisticas()');
-                console.log('• Para exportar locales: exportarDatosLocales()');
-                console.log('📈 Google Analytics activo para seguimiento');
                 
+                // Hacer funciones accesibles desde consola
                 window.verEstadisticas = verEstadisticas;
-                window.exportarDatosLocales = exportarDatosLocales;
-                window.mostrarResumenLocal = mostrarResumenLocal;
-                
-            }, 2000);
+            }
+            
+            // Iniciar cuando el DOM esté listo
+            setTimeout(inicializarTodo, 2000);
         });
     </script>
 </body>
