@@ -106,18 +106,18 @@
             100% { opacity: 1; }
         }
 
-        /* ============ METEORITOS MEJORADOS ============ */
+        /* ============ METEORITOS (SOLO DE NOCHE) ============ */
         .meteorito {
             position: absolute;
-            width: 12px; /* AUMENTADO de 4px */
-            height: 12px; /* AUMENTADO de 4px */
+            width: 12px;
+            height: 12px;
             background: radial-gradient(circle, #ffffff 0%, #4fc3f7 70%, #0288d1 100%);
             border-radius: 50%;
             box-shadow: 
                 0 0 15px 3px rgba(255, 255, 255, 0.9),
                 0 0 30px 6px rgba(79, 195, 247, 0.7),
                 inset 0 0 10px rgba(255, 255, 255, 0.8);
-            z-index: 20; /* AUMENTADO para estar por encima */
+            z-index: 20;
             pointer-events: auto;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -133,31 +133,14 @@
         }
 
         .meteorito.estrella-fugaz {
-            width: 6px; /* AUMENTADO de 3px */
-            height: 40px; /* AUMENTADO de 15px */
+            width: 6px;
+            height: 40px;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             background: linear-gradient(to bottom, #ffffff 0%, #4fc3f7 40%, #0288d1 100%);
             box-shadow: 
                 0 0 20px 5px rgba(255, 255, 255, 0.9),
                 0 0 40px 8px rgba(79, 195, 247, 0.8);
             animation: caerEstrella linear forwards;
-        }
-
-        /* Meteorito diurno (menos visible) */
-        .meteorito.diurno {
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(79, 195, 247, 0.8) 70%, rgba(2, 136, 209, 0.7) 100%);
-            box-shadow: 
-                0 0 10px 2px rgba(255, 255, 255, 0.7),
-                0 0 20px 4px rgba(79, 195, 247, 0.5),
-                inset 0 0 8px rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .meteorito.diurno.estrella-fugaz {
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(79, 195, 247, 0.7) 40%, rgba(2, 136, 209, 0.6) 100%);
-            box-shadow: 
-                0 0 15px 3px rgba(255, 255, 255, 0.7),
-                0 0 30px 6px rgba(79, 195, 247, 0.6);
         }
 
         @keyframes caerEstrella {
@@ -174,12 +157,64 @@
             }
         }
 
+        /* ============ FLORES (SOLO DE DÍA) ============ */
+        .flor {
+            position: absolute;
+            bottom: 10px;
+            z-index: 15;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+            animation: flotar 6s ease-in-out infinite;
+        }
+
+        .flor:hover {
+            transform: scale(1.2) translateY(-5px);
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* SVG para las flores - Todas las partes internas con pointer-events: none */
+        .flor svg {
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* IMPORTANTE: hace que el SVG no capture eventos */
+        }
+
+        .flor svg * {
+            pointer-events: none; /* IMPORTANTE: todas las partes internas no capturan eventos */
+        }
+
+        /* Contenedor para asegurar que todo el SVG sea clickeable */
+        .flor .flor-contenedor {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Flor rosa - Ajustada como elemento único */
+        .flor-rosa {
+            width: 45px;
+            height: 65px;
+        }
+
+        /* Tulipán - Ajustado como elemento único */
+        .flor-tulipan {
+            width: 40px;
+            height: 60px;
+        }
+
         /* ============ EXPLOSIÓN DE CORAZONES ============ */
         .corazon-explosion {
             position: absolute;
-            font-size: 36px; /* Aumentado */
+            font-size: 36px;
             color: #ff5252;
-            z-index: 100; /* Muy alto para estar encima de todo */
+            z-index: 100;
             pointer-events: none;
             animation: explotarCorazon 1s ease-out forwards;
             text-shadow: 
@@ -206,7 +241,7 @@
         /* Partículas de corazón */
         .particula-corazon {
             position: absolute;
-            font-size: 24px; /* Aumentado */
+            font-size: 24px;
             color: #ff5252;
             z-index: 90;
             pointer-events: none;
@@ -229,7 +264,7 @@
         /* Capa de transparencia para el contenido */
         #contenidoWrapper {
             position: relative;
-            z-index: 10; /* Menor que los meteoritos */
+            z-index: 10;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
@@ -293,7 +328,7 @@
         /* Reproductor de música - AJUSTADO PARA PC */
         .music-player {
             position: fixed;
-            bottom: 20px; /* MUCHO MÁS ABAJO en PC */
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1);
@@ -893,7 +928,7 @@
             
             /* REPRODUCTOR DE MÚSICA - POSICIÓN DIFERENTE EN MÓVIL */
             .music-player {
-                bottom: 70px !important; /* MÁS ARRIBA en móvil */
+                bottom: 70px !important;
                 max-width: 280px;
                 padding: 8px;
                 border-radius: 10px;
@@ -956,7 +991,11 @@
                 padding: 8px 12px;
             }
             
-            /* Ajustes meteoritos móvil - AUMENTADOS */
+            /* Ajustes flores y meteoritos en móvil */
+            .flor {
+                transform: scale(0.8);
+            }
+            
             .meteorito {
                 width: 16px;
                 height: 16px;
@@ -1051,7 +1090,11 @@
                 padding: 6px 10px;
             }
             
-            /* Ajustes meteoritos móvil muy pequeños */
+            /* Ajustes flores y meteoritos en móvil muy pequeño */
+            .flor {
+                transform: scale(0.7);
+            }
+            
             .meteorito {
                 width: 14px;
                 height: 14px;
@@ -1066,11 +1109,11 @@
         /* Media query solo para escritorio (más de 768px) */
         @media (min-width: 769px) {
             .music-player {
-                bottom: 20px; /* ABAJO DEL TODO en PC */
+                bottom: 20px;
             }
             
             .music-notification {
-                bottom: 80px; /* Justo arriba del botón de música */
+                bottom: 80px;
             }
         }
     </style>
@@ -1183,18 +1226,21 @@
                 const luna = document.getElementById('luna');
                 const estrellas = document.getElementById('estrellasContainer');
                 
-                if (hora >= amanecer && hora < atardecer) {
+                // Determinar si es de día o de noche
+                const esDia = hora >= amanecer && hora < atardecer;
+                
+                if (esDia) {
                     // ES DE DÍA
                     const duracionDia = atardecer - amanecer;
                     const horaActualDia = hora + minuto/60 - amanecer;
                     const progresoDia = horaActualDia / duracionDia;
                     
-                    // Posición del sol en el cielo (arco) - AJUSTADO MÁS ARRIBA
+                    // Posición del sol en el cielo (arco) - AJUSTADO MÁS BAJO
                     const angulo = progresoDia * Math.PI; // 0 a π radianes
                     
-                    // Coordenadas para el arco del sol - MÁS ARRIBA (de 10% a 40% de altura)
-                    const x = 50 + Math.sin(angulo) * 40; // 10% a 90% del ancho
-                    const y = 10 + Math.cos(angulo) * 40; // AJUSTADO: 10% a 50% de la altura (más arriba)
+                    // Coordenadas para el arco del sol - AJUSTADO MÁS BAJO (de 15% a 60% de altura)
+                    const x = 50 + Math.sin(angulo) * 35; // 15% a 85% del ancho
+                    const y = 30 + Math.cos(angulo) * 25; // AJUSTADO: 30% a 55% de la altura (más bajo)
                     
                     // Estilo del sol
                     sol.style.left = x + '%';
@@ -1248,9 +1294,9 @@
                     const progresoNoche = horaActualNoche / duracionNoche;
                     const angulo = progresoNoche * Math.PI;
                     
-                    // Coordenadas para el arco de la luna - AJUSTADO MÁS ARRIBA
+                    // Coordenadas para el arco de la luna - MANTENIDO IGUAL
                     const x = 50 + Math.sin(angulo) * 40;
-                    const y = 10 + Math.cos(angulo) * 40; // AJUSTADO: 10% a 50% de la altura (más arriba)
+                    const y = 10 + Math.cos(angulo) * 40; // 10% a 50% de la altura
                     
                     // Estilo de la luna
                     luna.style.left = x + '%';
@@ -1299,9 +1345,16 @@
                 
                 document.body.style.background = `linear-gradient(to bottom, ${colorInicio}, ${colorFin})`;
                 
-                // Controlar meteoritos - MODIFICADO: siempre activos pero con diferente frecuencia
-                const esNoche = hora < amanecer || hora >= atardecer;
-                controlarMeteoritos(esNoche);
+                // Controlar flor/meteoritos según sea de día o noche
+                if (esDia) {
+                    // De día: activar flores, desactivar meteoritos
+                    controlarFlores(true);
+                    controlarMeteoritos(false);
+                } else {
+                    // De noche: activar meteoritos, desactivar flores
+                    controlarFlores(false);
+                    controlarMeteoritos(true);
+                }
             }
             
             // Crear estrellas aleatorias
@@ -1333,37 +1386,403 @@
             }
             
             // ==============================================
-            // SISTEMA DE METEORITOS MEJORADO
+            // SISTEMA DE FLORES (DÍA) - CON SVG COMO ELEMENTO ÚNICO
+            // ==============================================
+            
+            let floresActivas = false;
+            let intervaloFlores;
+            let intervaloRosas;
+            let intervaloTulipanes;
+            
+            function controlarFlores(activar) {
+                if (activar && !floresActivas) {
+                    // Activar flores
+                    floresActivas = true;
+                    crearFloresIniciales();
+                    
+                    // Diferente frecuencia para rosas y tulipanes
+                    intervaloRosas = setInterval(crearFlorRosa, 5000); // Cada 5 segundos una rosa
+                    intervaloTulipanes = setInterval(crearFlorTulipan, 7000); // Cada 7 segundos un tulipán
+                    
+                    console.log('🌹 Flores activadas (día)');
+                    console.log('👉 ¡Haz clic en las flores para ver la explosión de corazones!');
+                    
+                } else if (!activar && floresActivas) {
+                    // Desactivar flores
+                    floresActivas = false;
+                    clearInterval(intervaloRosas);
+                    clearInterval(intervaloTulipanes);
+                    eliminarFlores();
+                    console.log('🌹 Flores desactivadas (noche)');
+                }
+            }
+            
+            function crearFloresIniciales() {
+                // Crear algunas flores iniciales inmediatamente
+                for (let i = 0; i < 2; i++) {
+                    setTimeout(() => {
+                        crearFlorRosa();
+                    }, i * 800);
+                }
+                
+                for (let i = 0; i < 2; i++) {
+                    setTimeout(() => {
+                        crearFlorTulipan();
+                    }, i * 1200);
+                }
+            }
+            
+            function crearFlorRosa() {
+                if (!floresActivas) return;
+                
+                const cieloContainer = document.getElementById('cieloContainer');
+                const flor = document.createElement('div');
+                flor.className = 'flor flor-rosa';
+                
+                // Crear SVG de rosa como elemento único
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute("viewBox", "0 0 45 65");
+                
+                // Pétalos de la rosa
+                const pétalo1 = document.createElementNS(svgNS, "ellipse");
+                pétalo1.setAttribute("cx", "22.5");
+                pétalo1.setAttribute("cy", "15");
+                pétalo1.setAttribute("rx", "10");
+                pétalo1.setAttribute("ry", "15");
+                pétalo1.setAttribute("fill", "#ff66b2");
+                pétalo1.setAttribute("transform", "rotate(0, 22.5, 15)");
+                
+                const pétalo2 = document.createElementNS(svgNS, "ellipse");
+                pétalo2.setAttribute("cx", "22.5");
+                pétalo2.setAttribute("cy", "15");
+                pétalo2.setAttribute("rx", "10");
+                pétalo2.setAttribute("ry", "15");
+                pétalo2.setAttribute("fill", "#ff66b2");
+                pétalo2.setAttribute("transform", "rotate(72, 22.5, 15)");
+                
+                const pétalo3 = document.createElementNS(svgNS, "ellipse");
+                pétalo3.setAttribute("cx", "22.5");
+                pétalo3.setAttribute("cy", "15");
+                pétalo3.setAttribute("rx", "10");
+                pétalo3.setAttribute("ry", "15");
+                pétalo3.setAttribute("fill", "#ff66b2");
+                pétalo3.setAttribute("transform", "rotate(144, 22.5, 15)");
+                
+                const pétalo4 = document.createElementNS(svgNS, "ellipse");
+                pétalo4.setAttribute("cx", "22.5");
+                pétalo4.setAttribute("cy", "15");
+                pétalo4.setAttribute("rx", "10");
+                pétalo4.setAttribute("ry", "15");
+                pétalo4.setAttribute("fill", "#ff66b2");
+                pétalo4.setAttribute("transform", "rotate(216, 22.5, 15)");
+                
+                const pétalo5 = document.createElementNS(svgNS, "ellipse");
+                pétalo5.setAttribute("cx", "22.5");
+                pétalo5.setAttribute("cy", "15");
+                pétalo5.setAttribute("rx", "10");
+                pétalo5.setAttribute("ry", "15");
+                pétalo5.setAttribute("fill", "#ff66b2");
+                pétalo5.setAttribute("transform", "rotate(288, 22.5, 15)");
+                
+                // Centro de la rosa
+                const centro = document.createElementNS(svgNS, "circle");
+                centro.setAttribute("cx", "22.5");
+                centro.setAttribute("cy", "15");
+                centro.setAttribute("r", "6");
+                centro.setAttribute("fill", "#ffcc00");
+                
+                // Tallo
+                const tallo = document.createElementNS(svgNS, "rect");
+                tallo.setAttribute("x", "21");
+                tallo.setAttribute("y", "25");
+                tallo.setAttribute("width", "3");
+                tallo.setAttribute("height", "35");
+                tallo.setAttribute("fill", "#4CAF50");
+                
+                // Hoja
+                const hoja = document.createElementNS(svgNS, "ellipse");
+                hoja.setAttribute("cx", "25");
+                hoja.setAttribute("cy", "45");
+                hoja.setAttribute("rx", "8");
+                hoja.setAttribute("ry", "4");
+                hoja.setAttribute("fill", "#4CAF50");
+                hoja.setAttribute("transform", "rotate(-30, 25, 45)");
+                
+                // Añadir todos los elementos al SVG
+                svg.appendChild(pétalo1);
+                svg.appendChild(pétalo2);
+                svg.appendChild(pétalo3);
+                svg.appendChild(pétalo4);
+                svg.appendChild(pétalo5);
+                svg.appendChild(centro);
+                svg.appendChild(tallo);
+                svg.appendChild(hoja);
+                
+                // Añadir el SVG al div de la flor
+                flor.appendChild(svg);
+                
+                // Posición aleatoria en la parte inferior
+                const posicionX = Math.random() * 80 + 10; // 10% a 90%
+                flor.style.left = posicionX + '%';
+                flor.style.bottom = '10px';
+                
+                // Retraso aleatorio para animación de flotación
+                const retraso = Math.random() * 3;
+                flor.style.animationDelay = retraso + 's';
+                
+                // Añadir evento de click/touch al contenedor de la flor (no al SVG)
+                flor.addEventListener('click', function(event) {
+                    // Asegurarnos de que el evento es en el contenedor, no en el SVG
+                    if (event.target === flor || event.target === svg) {
+                        explotarFlor(event, flor);
+                    }
+                });
+                
+                flor.addEventListener('touchstart', function(event) {
+                    event.preventDefault();
+                    if (event.target === flor || event.target === svg) {
+                        explotarFlor(event, flor);
+                    }
+                });
+                
+                cieloContainer.appendChild(flor);
+                
+                // Eliminar después de cierto tiempo
+                setTimeout(() => {
+                    if (flor.parentNode) {
+                        flor.parentNode.removeChild(flor);
+                    }
+                }, 20000); // 20 segundos
+            }
+            
+            function crearFlorTulipan() {
+                if (!floresActivas) return;
+                
+                const cieloContainer = document.getElementById('cieloContainer');
+                const flor = document.createElement('div');
+                
+                // Asignar color aleatorio
+                const colores = ['#ff4444', '#ff9900', '#9966ff', '#66ff99'];
+                const colorIndex = Math.floor(Math.random() * colores.length);
+                const color = colores[colorIndex];
+                const colorClaro = color.replace('44', '66').replace('99', 'cc').replace('66', '99');
+                
+                flor.className = 'flor flor-tulipan';
+                
+                // Crear SVG de tulipán como elemento único
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute("viewBox", "0 0 40 60");
+                
+                // Corola del tulipán
+                const corola = document.createElementNS(svgNS, "path");
+                corola.setAttribute("d", "M20,5 C25,5 30,10 30,20 C30,25 25,30 20,30 C15,30 10,25 10,20 C10,10 15,5 20,5 Z");
+                corola.setAttribute("fill", `url(#gradienteTulipan${colorIndex})`);
+                
+                // Definir gradiente para el tulipán
+                const defs = document.createElementNS(svgNS, "defs");
+                const gradient = document.createElementNS(svgNS, "linearGradient");
+                gradient.setAttribute("id", `gradienteTulipan${colorIndex}`);
+                gradient.setAttribute("x1", "0%");
+                gradient.setAttribute("y1", "0%");
+                gradient.setAttribute("x2", "0%");
+                gradient.setAttribute("y2", "100%");
+                
+                const stop1 = document.createElementNS(svgNS, "stop");
+                stop1.setAttribute("offset", "0%");
+                stop1.setAttribute("stop-color", color);
+                
+                const stop2 = document.createElementNS(svgNS, "stop");
+                stop2.setAttribute("offset", "50%");
+                stop2.setAttribute("stop-color", colorClaro);
+                
+                const stop3 = document.createElementNS(svgNS, "stop");
+                stop3.setAttribute("offset", "100%");
+                stop3.setAttribute("stop-color", color);
+                
+                gradient.appendChild(stop1);
+                gradient.appendChild(stop2);
+                gradient.appendChild(stop3);
+                defs.appendChild(gradient);
+                
+                // Centro del tulipán
+                const centro = document.createElementNS(svgNS, "circle");
+                centro.setAttribute("cx", "20");
+                centro.setAttribute("cy", "15");
+                centro.setAttribute("r", "3");
+                centro.setAttribute("fill", "#ffcc00");
+                
+                // Tallo
+                const tallo = document.createElementNS(svgNS, "rect");
+                tallo.setAttribute("x", "18");
+                tallo.setAttribute("y", "25");
+                tallo.setAttribute("width", "4");
+                tallo.setAttribute("height", "30");
+                tallo.setAttribute("fill", "#4CAF50");
+                
+                // Hoja
+                const hoja = document.createElementNS(svgNS, "ellipse");
+                hoja.setAttribute("cx", "24");
+                hoja.setAttribute("cy", "45");
+                hoja.setAttribute("rx", "10");
+                hoja.setAttribute("ry", "5");
+                hoja.setAttribute("fill", "#4CAF50");
+                hoja.setAttribute("transform", "rotate(-20, 24, 45)");
+                
+                // Añadir todos los elementos al SVG
+                svg.appendChild(defs);
+                svg.appendChild(corola);
+                svg.appendChild(centro);
+                svg.appendChild(tallo);
+                svg.appendChild(hoja);
+                
+                // Añadir el SVG al div de la flor
+                flor.appendChild(svg);
+                
+                // Posición aleatoria en la parte inferior
+                const posicionX = Math.random() * 80 + 10; // 10% a 90%
+                flor.style.left = posicionX + '%';
+                flor.style.bottom = '10px';
+                
+                // Retraso aleatorio para animación de flotación
+                const retraso = Math.random() * 3;
+                flor.style.animationDelay = retraso + 's';
+                
+                // Añadir evento de click/touch al contenedor de la flor (no al SVG)
+                flor.addEventListener('click', function(event) {
+                    // Asegurarnos de que el evento es en el contenedor, no en el SVG
+                    if (event.target === flor || event.target === svg) {
+                        explotarFlor(event, flor);
+                    }
+                });
+                
+                flor.addEventListener('touchstart', function(event) {
+                    event.preventDefault();
+                    if (event.target === flor || event.target === svg) {
+                        explotarFlor(event, flor);
+                    }
+                });
+                
+                cieloContainer.appendChild(flor);
+                
+                // Eliminar después de cierto tiempo
+                setTimeout(() => {
+                    if (flor.parentNode) {
+                        flor.parentNode.removeChild(flor);
+                    }
+                }, 20000); // 20 segundos
+            }
+            
+            function eliminarFlores() {
+                const flores = document.querySelectorAll('.flor');
+                flores.forEach(flor => {
+                    if (flor.parentNode) {
+                        flor.parentNode.removeChild(flor);
+                    }
+                });
+            }
+            
+            function explotarFlor(event, flor) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const rect = flor.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                console.log('💐 ¡Flor clickeada! Explotando en:', x, y);
+                
+                // Reproducir sonido de explosión
+                const explosionSound = document.getElementById('explosionSound');
+                explosionSound.currentTime = 0;
+                explosionSound.volume = 0.3;
+                explosionSound.play().catch(e => console.log("Error al reproducir sonido:", e));
+                
+                // Crear explosión de corazón principal
+                const explosion = document.createElement('div');
+                explosion.className = 'corazon-explosion';
+                explosion.innerHTML = '❤️';
+                explosion.style.left = x + 'px';
+                explosion.style.top = y + 'px';
+                
+                document.body.appendChild(explosion);
+                
+                // Crear partículas de corazón
+                const numParticulas = 12;
+                for (let i = 0; i < numParticulas; i++) {
+                    setTimeout(() => {
+                        const particula = document.createElement('div');
+                        particula.className = 'particula-corazon';
+                        particula.innerHTML = '❤️';
+                        particula.style.left = x + 'px';
+                        particula.style.top = y + 'px';
+                        
+                        // Dirección aleatoria
+                        const angulo = Math.random() * Math.PI * 2;
+                        const distancia = 60 + Math.random() * 120;
+                        const tx = Math.cos(angulo) * distancia;
+                        const ty = Math.sin(angulo) * distancia;
+                        
+                        particula.style.setProperty('--tx', tx + 'px');
+                        particula.style.setProperty('--ty', ty + 'px');
+                        
+                        document.body.appendChild(particula);
+                        
+                        // Eliminar partícula después de la animación
+                        setTimeout(() => {
+                            if (particula.parentNode) {
+                                particula.parentNode.removeChild(particula);
+                            }
+                        }, 1500);
+                    }, i * 30);
+                }
+                
+                // Eliminar flor
+                if (flor.parentNode) {
+                    flor.parentNode.removeChild(flor);
+                }
+                
+                // Eliminar explosión principal después de la animación
+                setTimeout(() => {
+                    if (explosion.parentNode) {
+                        explosion.parentNode.removeChild(explosion);
+                    }
+                }, 1000);
+                
+                // Mostrar notificación
+                showNotification("¡Flor convertida en amor! ❤️");
+            }
+            
+            // ==============================================
+            // SISTEMA DE METEORITOS (NOCHE)
             // ==============================================
             
             let meteoritosActivos = false;
             let intervaloMeteoritos;
-            let esNocheActual = false;
             
-            function controlarMeteoritos(esNoche) {
-                esNocheActual = esNoche;
-                
-                if (!meteoritosActivos) {
-                    // Activar meteoritos siempre (día y noche)
+            function controlarMeteoritos(activar) {
+                if (activar && !meteoritosActivos) {
+                    // Activar meteoritos
                     meteoritosActivos = true;
-                    crearMeteoritos();
+                    crearMeteoritosIniciales();
                     
-                    // Diferente frecuencia según sea de día o de noche
-                    const intervalo = esNoche ? 8000 : 15000; // Noche: 8 seg, Día: 15 seg
-                    intervaloMeteoritos = setInterval(crearMeteoritoIndividual, intervalo);
+                    // Frecuencia de meteoritos cada 8 segundos
+                    intervaloMeteoritos = setInterval(crearMeteoritoIndividual, 8000);
                     
-                    console.log(`🌠 Meteoritos activados: ${esNoche ? 'Noche (cada 8s)' : 'Día (cada 15s)'}`);
+                    console.log('🌠 Meteoritos activados (noche)');
                     console.log('👉 ¡Haz clic en los meteoritos para ver la explosión de corazones!');
-                } else {
-                    // Actualizar frecuencia si cambió de día a noche o viceversa
+                    
+                } else if (!activar && meteoritosActivos) {
+                    // Desactivar meteoritos
+                    meteoritosActivos = false;
                     clearInterval(intervaloMeteoritos);
-                    const intervalo = esNoche ? 8000 : 15000;
-                    intervaloMeteoritos = setInterval(crearMeteoritoIndividual, intervalo);
-                    console.log(`🌠 Frecuencia de meteoritos actualizada: ${esNoche ? 'Noche (cada 8s)' : 'Día (cada 15s)'}`);
+                    eliminarMeteoritos();
+                    console.log('🌠 Meteoritos desactivados (día)');
                 }
             }
             
-            function crearMeteoritos() {
+            function crearMeteoritosIniciales() {
                 // Crear algunos meteoritos iniciales inmediatamente
                 for (let i = 0; i < 3; i++) {
                     setTimeout(() => {
@@ -1377,13 +1796,7 @@
                 
                 const cieloContainer = document.getElementById('cieloContainer');
                 const meteorito = document.createElement('div');
-                
-                // Determinar si es de día o noche para el estilo
-                if (esNocheActual) {
-                    meteorito.className = 'meteorito estrella-fugaz';
-                } else {
-                    meteorito.className = 'meteorito estrella-fugaz diurno';
-                }
+                meteorito.className = 'meteorito estrella-fugaz';
                 
                 // Posición inicial aleatoria en la parte superior
                 const inicioX = Math.random() * 100;
@@ -1404,14 +1817,10 @@
                 
                 cieloContainer.appendChild(meteorito);
                 
-                // Log para depuración
-                console.log(`☄️ Meteorito creado en ${inicioX}% - Duración: ${duracion}s - Tipo: ${esNocheActual ? 'Nocturno' : 'Diurno'}`);
-                
                 // Eliminar después de la animación
                 setTimeout(() => {
                     if (meteorito.parentNode) {
                         meteorito.parentNode.removeChild(meteorito);
-                        console.log(`🗑️ Meteorito eliminado (posición: ${inicioX}%)`);
                     }
                 }, duracion * 1000);
             }
@@ -1497,22 +1906,18 @@
                 showNotification("¡Meteorito convertido en amor! ❤️");
             }
             
+            // Función para forzar la creación de una flor (para pruebas)
+            window.crearFlorTest = function() {
+                crearFlorRosa();
+                console.log("✅ Flor de prueba creada - ¡Haz clic en ella!");
+                showNotification("Flor de prueba creada");
+            }
+            
             // Función para forzar la creación de un meteorito (para pruebas)
             window.crearMeteoritoTest = function() {
                 crearMeteoritoIndividual();
                 console.log("✅ Meteorito de prueba creado - ¡Haz clic en él!");
                 showNotification("Meteorito de prueba creado");
-            }
-            
-            // Función para crear múltiples meteoritos de prueba
-            window.crearLluviaMeteoritos = function(cantidad = 5) {
-                for (let i = 0; i < cantidad; i++) {
-                    setTimeout(() => {
-                        crearMeteoritoIndividual();
-                    }, i * 300);
-                }
-                console.log(`✅ ${cantidad} meteoritos de prueba creados`);
-                showNotification(`Lluvia de ${cantidad} meteoritos creada`);
             }
             
             // ==============================================
@@ -1712,7 +2117,7 @@
             });
             
             // ==============================================
-            // SISTEMA DE MÚSICA AVANZADO (con ajuste de posición)
+            // SISTEMA DE MÚSICA AVANZADO (sin cambios)
             // ==============================================
             
             const songs = [
@@ -2039,20 +2444,20 @@
                 
                 // Mostrar información en consola
                 console.log('🎵 REPRODUCTOR DE MÚSICA - 3 canciones');
-                console.log('🌞 SISTEMA DE SOL Y LUNA ACTIVO');
-                console.log('☄️ SISTEMA DE METEORITOS ACTIVO (día y noche)');
-                console.log('   - Noche (18:00-6:00): Meteorito cada 8 segundos');
-                console.log('   - Día (6:00-18:00): Meteorito cada 15 segundos');
-                console.log('💥 ¡Haz clic en los meteoritos para convertirlos en corazones!');
+                console.log('🌞 SISTEMA DE SOL Y LUNA ACTIVO (sol ajustado)');
+                console.log('🌹 FLORES DE DÍA - METEORITOS DE NOCHE');
+                console.log('   - Día (8:00-18:00): Flores (rosas y tulipanes)');
+                console.log('   - Noche (18:00-8:00): Meteoritos');
+                console.log('💥 ¡Haz clic en flores o meteoritos para convertirlos en corazones!');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
                 console.log('• Para ver estadísticas: verEstadisticas()');
+                console.log('• Para crear flor de prueba: crearFlorTest()');
                 console.log('• Para crear meteorito de prueba: crearMeteoritoTest()');
-                console.log('• Para crear lluvia de meteoritos: crearLluviaMeteoritos(10)');
                 
                 // Hacer funciones accesibles desde consola
                 window.verEstadisticas = verEstadisticas;
+                window.crearFlorTest = crearFlorTest;
                 window.crearMeteoritoTest = crearMeteoritoTest;
-                window.crearLluviaMeteoritos = crearLluviaMeteoritos;
             }
             
             // Iniciar cuando el DOM esté listo
