@@ -209,6 +209,63 @@
             height: 60px;
         }
 
+        /* ============ CORAZÓN DE PULSACIÓN LARGA (NUEVO) ============ */
+        .corazon-pulsacion {
+            position: absolute;
+            font-size: 150px; /* Tamaño grande */
+            color: #ff5252;
+            z-index: 1000; /* Muy por encima de todo */
+            pointer-events: none;
+            animation: acercarseCorazon 3s ease-out forwards;
+            text-shadow: 
+                0 0 50px rgba(255, 82, 82, 0.9),
+                0 0 100px rgba(255, 82, 82, 0.7),
+                0 0 150px rgba(255, 82, 82, 0.5);
+            filter: drop-shadow(0 0 30px rgba(255, 82, 82, 0.8));
+            transform-origin: center;
+        }
+
+        @keyframes acercarseCorazon {
+            0% {
+                transform: scale(0.1) translateY(0) translateZ(0);
+                opacity: 0.8;
+            }
+            30% {
+                transform: scale(1) translateY(-50px) translateZ(100px);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(1.5) translateY(-100px) translateZ(200px);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.5) translateY(-150px) translateZ(300px);
+                opacity: 0;
+            }
+        }
+
+        /* Indicador de carga durante la pulsación */
+        .pulsacion-cargando {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 82, 82, 0.3);
+            border-top-color: #ff5252;
+            animation: girarCarga 1s linear infinite;
+            z-index: 999;
+            pointer-events: none;
+            display: none;
+        }
+
+        @keyframes girarCarga {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
         /* ============ EXPLOSIÓN DE CORAZONES ============ */
         .corazon-explosion {
             position: absolute;
@@ -914,6 +971,16 @@
                 animation: floatDownMobile 2s ease-in-out infinite;
             }
             
+            /* Ajustes para el corazón de pulsación en móvil */
+            .corazon-pulsacion {
+                font-size: 120px;
+            }
+            
+            .pulsacion-cargando {
+                width: 50px;
+                height: 50px;
+            }
+            
             /* Ajustes para el botón de música en móvil */
             .music-control {
                 bottom: 15px;
@@ -1045,6 +1112,16 @@
                 bottom: -25px;
             }
             
+            /* Ajustes para el corazón de pulsación en móvil pequeño */
+            .corazon-pulsacion {
+                font-size: 100px;
+            }
+            
+            .pulsacion-cargando {
+                width: 40px;
+                height: 40px;
+            }
+            
             /* Ajustes para pantallas muy pequeñas */
             .music-control {
                 bottom: 10px;
@@ -1141,6 +1218,8 @@
                     <div class="emoji-top" id="emoji-top"></div>
                     <div class="emoji-bottom" id="emoji-bottom"></div>
                 </div>
+                <!-- Indicador de carga para pulsación larga -->
+                <div class="pulsacion-cargando" id="pulsacionCargando"></div>
             </div>
         </div>
     </div>
@@ -1204,6 +1283,123 @@
 
     <script>
         $(document).ready(function() {
+            // ==============================================
+            // NUEVO: SISTEMA DE PULSACIÓN LARGA EN EL SOBRE
+            // ==============================================
+            
+            let pulsacionTimer = null;
+            let pulsacionActiva = false;
+            const tiempoPulsacion = 3000; // 3 segundos
+            
+            function iniciarPulsacion(event) {
+                if (pulsacionActiva) return;
+                
+                event.preventDefault();
+                event.stopPropagation();
+                
+                pulsacionActiva = true;
+                
+                // Mostrar indicador de carga
+                const cargando = document.getElementById('pulsacionCargando');
+                cargando.style.display = 'block';
+                
+                // Iniciar temporizador
+                pulsacionTimer = setTimeout(() => {
+                    crearCorazonPulsacion(event);
+                    detenerPulsacion();
+                }, tiempoPulsacion);
+                
+                console.log('⏱️ Pulsación larga iniciada...');
+            }
+            
+            function detenerPulsacion(event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                if (pulsacionTimer) {
+                    clearTimeout(pulsacionTimer);
+                    pulsacionTimer = null;
+                }
+                
+                if (pulsacionActiva) {
+                    pulsacionActiva = false;
+                    
+                    // Ocultar indicador de carga
+                    const cargando = document.getElementById('pulsacionCargando');
+                    cargando.style.display = 'none';
+                    
+                    console.log('⏱️ Pulsación cancelada');
+                }
+            }
+            
+            function crearCorazonPulsacion(event) {
+                const envelope = document.querySelector('.envelope');
+                const rect = envelope.getBoundingClientRect();
+                
+                // Calcular posición central del sobre
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                console.log('💖 Creando corazón de pulsación en:', x, y);
+                
+                // Reproducir sonido de explosión (más suave)
+                const explosionSound = document.getElementById('explosionSound');
+                explosionSound.currentTime = 0;
+                explosionSound.volume = 0.2;
+                explosionSound.play().catch(e => console.log("Error al reproducir sonido:", e));
+                
+                // Crear corazón grande
+                const corazon = document.createElement('div');
+                corazon.className = 'corazon-pulsacion';
+                corazon.innerHTML = '❤️';
+                corazon.style.left = x + 'px';
+                corazon.style.top = y + 'px';
+                
+                // Añadir al body
+                document.body.appendChild(corazon);
+                
+                // Mostrar notificación
+                showNotification("¡Corazón especial enviado! ❤️");
+                
+                // Registrar en estadísticas
+                registrarVisitaLocal('Corazón especial (pulsación larga)', '💖');
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    if (corazon.parentNode) {
+                        corazon.parentNode.removeChild(corazon);
+                    }
+                }, 3000);
+            }
+            
+            // Añadir eventos al sobre para pulsación larga
+            const envelopeElement = document.querySelector('.envelope');
+            
+            // Eventos para mouse
+            envelopeElement.addEventListener('mousedown', iniciarPulsacion);
+            envelopeElement.addEventListener('mouseup', detenerPulsacion);
+            envelopeElement.addEventListener('mouseleave', detenerPulsacion);
+            
+            // Eventos para touch
+            envelopeElement.addEventListener('touchstart', function(event) {
+                iniciarPulsacion(event);
+            });
+            
+            envelopeElement.addEventListener('touchend', function(event) {
+                detenerPulsacion(event);
+            });
+            
+            envelopeElement.addEventListener('touchcancel', function(event) {
+                detenerPulsacion(event);
+            });
+            
+            // Prevenir el comportamiento por defecto del touch
+            envelopeElement.addEventListener('touchmove', function(event) {
+                event.preventDefault();
+            });
+            
             // ==============================================
             // SISTEMA DE SOL Y LUNA SEGÚN LA HORA
             // ==============================================
@@ -2039,7 +2235,7 @@
             }
             
             function abrirSobre() {
-                if (animando) return;
+                if (animando || pulsacionActiva) return;
                 animando = true;
                 animacionAbiertaCompleta = false;
                 
@@ -2069,7 +2265,7 @@
             }
             
             function iniciarCierre() {
-                if (animando || !sobreAbierto) return;
+                if (animando || !sobreAbierto || pulsacionActiva) return;
                 animando = true;
                 
                 $('.envelope').removeClass('show-text');
@@ -2105,13 +2301,23 @@
                 }, 500);
             }
             
-            $('.envelope').click(function() {
+            $('.envelope').click(function(event) {
+                // Evitar que el clic normal se active durante la pulsación
+                if (pulsacionActiva) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                
                 if (sobreAbierto) iniciarCierre();
                 else abrirSobre();
             });
             
             $('.envelope').on('touchstart', function(e) {
                 e.preventDefault();
+                // Si ya estamos en pulsación larga, no hacer nada
+                if (pulsacionActiva) return;
+                
                 if (sobreAbierto) iniciarCierre();
                 else abrirSobre();
             });
@@ -2436,6 +2642,7 @@
                 
                 // Mostrar notificación inicial
                 showNotification("¡Descubre mensajes especiales!");
+                showNotification("💡 Mantén pulsado el sobre 3 segundos para un corazón especial");
                 $('#musicControl').addClass('pulsing');
                 
                 setTimeout(function() {
@@ -2449,6 +2656,7 @@
                 console.log('   - Día (8:00-18:00): Flores (rosas y tulipanes)');
                 console.log('   - Noche (18:00-8:00): Meteoritos');
                 console.log('💥 ¡Haz clic en flores o meteoritos para convertirlos en corazones!');
+                console.log('💖 NUEVO: ¡Mantén pulsado el sobre 3 segundos para un corazón especial!');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
                 console.log('• Para ver estadísticas: verEstadisticas()');
                 console.log('• Para crear flor de prueba: crearFlorTest()');
