@@ -211,7 +211,7 @@
 
         /* ============ CORAZÓN DE PULSACIÓN LARGA (NUEVO) ============ */
         .corazon-pulsacion {
-            position: absolute;
+            position: fixed;
             font-size: 150px; /* Tamaño grande */
             color: #ff5252;
             z-index: 1000; /* Muy por encima de todo */
@@ -246,7 +246,7 @@
 
         /* Indicador de carga durante la pulsación */
         .pulsacion-cargando {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -1218,11 +1218,12 @@
                     <div class="emoji-top" id="emoji-top"></div>
                     <div class="emoji-bottom" id="emoji-bottom"></div>
                 </div>
-                <!-- Indicador de carga para pulsación larga -->
-                <div class="pulsacion-cargando" id="pulsacionCargando"></div>
             </div>
         </div>
     </div>
+    
+    <!-- Indicador de carga para pulsación larga (FUERA del sobre) -->
+    <div class="pulsacion-cargando" id="pulsacionCargando"></div>
     
     <!-- Reproductor de música (INICIALMENTE OCULTO) -->
     <div class="music-player" id="musicPlayer">
@@ -1289,17 +1290,20 @@
             
             let pulsacionTimer = null;
             let pulsacionActiva = false;
+            let touchStartTime = 0;
             const tiempoPulsacion = 3000; // 3 segundos
             
             function iniciarPulsacion(event) {
-                if (pulsacionActiva) return;
+                if (pulsacionActiva || sobreAbierto || animando) return;
                 
                 event.preventDefault();
                 event.stopPropagation();
                 
+                // Guardar tiempo de inicio
+                touchStartTime = Date.now();
                 pulsacionActiva = true;
                 
-                // Mostrar indicador de carga
+                // Mostrar indicador de carga EN EL CENTRO DE LA PANTALLA
                 const cargando = document.getElementById('pulsacionCargando');
                 cargando.style.display = 'block';
                 
@@ -1324,13 +1328,21 @@
                 }
                 
                 if (pulsacionActiva) {
+                    const touchDuration = Date.now() - touchStartTime;
+                    
+                    // Si fue un touch corto (menos de 300ms), NO hacer nada especial
+                    // Solo ocultar el loader y resetear
+                    if (touchDuration < 300) {
+                        console.log('⏱️ Touch corto - ignorando pulsación');
+                    } else if (touchDuration < tiempoPulsacion) {
+                        console.log('⏱️ Pulsación cancelada después de', touchDuration + 'ms');
+                    }
+                    
                     pulsacionActiva = false;
                     
                     // Ocultar indicador de carga
                     const cargando = document.getElementById('pulsacionCargando');
                     cargando.style.display = 'none';
-                    
-                    console.log('⏱️ Pulsación cancelada');
                 }
             }
             
@@ -1373,32 +1385,6 @@
                     }
                 }, 3000);
             }
-            
-            // Añadir eventos al sobre para pulsación larga
-            const envelopeElement = document.querySelector('.envelope');
-            
-            // Eventos para mouse
-            envelopeElement.addEventListener('mousedown', iniciarPulsacion);
-            envelopeElement.addEventListener('mouseup', detenerPulsacion);
-            envelopeElement.addEventListener('mouseleave', detenerPulsacion);
-            
-            // Eventos para touch
-            envelopeElement.addEventListener('touchstart', function(event) {
-                iniciarPulsacion(event);
-            });
-            
-            envelopeElement.addEventListener('touchend', function(event) {
-                detenerPulsacion(event);
-            });
-            
-            envelopeElement.addEventListener('touchcancel', function(event) {
-                detenerPulsacion(event);
-            });
-            
-            // Prevenir el comportamiento por defecto del touch
-            envelopeElement.addEventListener('touchmove', function(event) {
-                event.preventDefault();
-            });
             
             // ==============================================
             // SISTEMA DE SOL Y LUNA SEGÚN LA HORA
@@ -2117,7 +2103,7 @@
             }
             
             // ==============================================
-            // SISTEMA DE LA CARTA (sin cambios)
+            // SISTEMA DE LA CARTA
             // ==============================================
             
             let sobreAbierto = false;
@@ -2235,7 +2221,8 @@
             }
             
             function abrirSobre() {
-                if (animando || pulsacionActiva) return;
+                if (animando || pulsacionActiva || sobreAbierto) return;
+                
                 animando = true;
                 animacionAbiertaCompleta = false;
                 
@@ -2301,26 +2288,86 @@
                 }, 500);
             }
             
+            // Configurar eventos para el sobre - SEPARADO PARA MOUSE Y TOUCH
+            
+            // Para mouse (PC)
+            $('.envelope').on('mousedown', function(event) {
+                // Solo iniciar pulsación si NO está abierto el sobre
+                if (!sobreAbierto && !animando) {
+                    iniciarPulsacion(event);
+                }
+            });
+            
+            $('.envelope').on('mouseup mouseleave', function(event) {
+                detenerPulsacion(event);
+            });
+            
             $('.envelope').click(function(event) {
-                // Evitar que el clic normal se active durante la pulsación
+                // Si estamos en medio de una pulsación, ignorar el clic
                 if (pulsacionActiva) {
                     event.preventDefault();
                     event.stopPropagation();
                     return;
                 }
                 
-                if (sobreAbierto) iniciarCierre();
-                else abrirSobre();
+                // Si el sobre está cerrado, abrirlo
+                if (!sobreAbierto) {
+                    abrirSobre();
+                } else {
+                    // Si está abierto, cerrarlo
+                    iniciarCierre();
+                }
             });
             
-            $('.envelope').on('touchstart', function(e) {
-                e.preventDefault();
-                // Si ya estamos en pulsación larga, no hacer nada
-                if (pulsacionActiva) return;
+            // Para touch (móvil) - LÓGICA MEJORADA
+            const envelopeElement = document.querySelector('.envelope');
+            
+            envelopeElement.addEventListener('touchstart', function(event) {
+                event.preventDefault();
                 
-                if (sobreAbierto) iniciarCierre();
-                else abrirSobre();
-            });
+                // Solo iniciar pulsación si NO está abierto el sobre
+                if (!sobreAbierto && !animando) {
+                    iniciarPulsacion(event);
+                }
+            }, { passive: false });
+            
+            envelopeElement.addEventListener('touchend', function(event) {
+                event.preventDefault();
+                
+                // Verificar si fue una pulsación larga
+                if (pulsacionActiva) {
+                    const touchDuration = Date.now() - touchStartTime;
+                    
+                    // Si fue una pulsación corta (menos de 300ms), abrir/cerrar el sobre
+                    if (touchDuration < 300) {
+                        detenerPulsacion(event);
+                        
+                        // Pequeño delay para evitar conflictos
+                        setTimeout(() => {
+                            if (!sobreAbierto) {
+                                abrirSobre();
+                            } else {
+                                iniciarCierre();
+                            }
+                        }, 50);
+                    } else {
+                        // Si fue más larga, solo detener la pulsación
+                        detenerPulsacion(event);
+                    }
+                } else {
+                    // Si no hay pulsación activa, manejar normalmente
+                    if (!sobreAbierto) {
+                        abrirSobre();
+                    } else {
+                        iniciarCierre();
+                    }
+                }
+            }, { passive: false });
+            
+            envelopeElement.addEventListener('touchcancel', function(event) {
+                event.preventDefault();
+                detenerPulsacion(event);
+            }, { passive: false });
             
             // ==============================================
             // SISTEMA DE MÚSICA AVANZADO (sin cambios)
@@ -2657,6 +2704,7 @@
                 console.log('   - Noche (18:00-8:00): Meteoritos');
                 console.log('💥 ¡Haz clic en flores o meteoritos para convertirlos en corazones!');
                 console.log('💖 NUEVO: ¡Mantén pulsado el sobre 3 segundos para un corazón especial!');
+                console.log('📱 MÓVIL: Touch corto = abrir/cerrar sobre | Touch largo (3s) = corazón especial');
                 console.log('📊 SISTEMA DE VISITAS LOCAL ACTIVO');
                 console.log('• Para ver estadísticas: verEstadisticas()');
                 console.log('• Para crear flor de prueba: crearFlorTest()');
