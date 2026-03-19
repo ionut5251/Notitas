@@ -55,32 +55,24 @@
         /* Sol y luna - versión simplificada para fondo */
         #sol {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
+            width: 110px;
+            height: 110px;
             background: radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, #ff5722 100%);
             border-radius: 50%;
-            box-shadow: 0 0 80px rgba(255, 235, 59, 0.7), 0 0 200px rgba(255, 152, 0, 0.4);
-            z-index: 1;
+            box-shadow: 0 0 55px rgba(255, 235, 59, 0.7), 0 0 140px rgba(255, 152, 0, 0.4);
+            z-index: 2;
             opacity: 0.9;
-            transition: all 2s ease;
+            transition: left 2s ease, top 2s ease, opacity 2s ease;
         }
 
         #luna {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 120px;
-            height: 120px;
-            margin: -60px 0 0 -60px;
-            background: radial-gradient(circle, #e0f7fa 0%, #b2ebf2 40%, #80deea 70%, #4dd0e1 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 60px rgba(224, 247, 250, 0.6), 0 0 150px rgba(178, 235, 242, 0.3);
-            z-index: 1;
+            width: 100px;
+            height: 100px;
+            z-index: 2;
             opacity: 0;
-            transition: all 2s ease;
+            transition: left 2s ease, top 2s ease, opacity 2s ease;
+            filter: drop-shadow(0 0 18px rgba(200, 230, 255, 0.7)) drop-shadow(0 0 40px rgba(150, 200, 255, 0.35));
         }
 
         #estrellasContainer {
@@ -1199,7 +1191,38 @@
     <!-- Contenedor del cielo con sol y luna -->
     <div id="cieloContainer">
         <div id="sol"></div>
-        <div id="luna"></div>
+        <svg id="luna" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <radialGradient id="lunaGrad" cx="40%" cy="35%" r="60%">
+                    <stop offset="0%" stop-color="#f0f4ff"/>
+                    <stop offset="40%" stop-color="#d6e4f7"/>
+                    <stop offset="100%" stop-color="#8aafd4"/>
+                </radialGradient>
+                <radialGradient id="sombraLuna" cx="75%" cy="65%" r="55%">
+                    <stop offset="0%" stop-color="#4a6fa5" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#4a6fa5" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="crater1g" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#7a9fc8" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#7a9fc8" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <!-- Disco principal -->
+            <circle cx="55" cy="55" r="50" fill="url(#lunaGrad)"/>
+            <!-- Sombra lateral para dar volumen -->
+            <circle cx="55" cy="55" r="50" fill="url(#sombraLuna)"/>
+            <!-- Cráteres -->
+            <circle cx="38" cy="42" r="8" fill="url(#crater1g)"/>
+            <circle cx="38" cy="42" r="8" fill="none" stroke="#7a9fc8" stroke-width="0.8" stroke-opacity="0.4"/>
+            <circle cx="65" cy="38" r="5" fill="url(#crater1g)"/>
+            <circle cx="65" cy="38" r="5" fill="none" stroke="#7a9fc8" stroke-width="0.7" stroke-opacity="0.3"/>
+            <circle cx="50" cy="68" r="6" fill="url(#crater1g)"/>
+            <circle cx="50" cy="68" r="6" fill="none" stroke="#7a9fc8" stroke-width="0.7" stroke-opacity="0.35"/>
+            <circle cx="72" cy="60" r="4" fill="url(#crater1g)"/>
+            <circle cx="30" cy="62" r="3" fill="url(#crater1g)" fill-opacity="0.5"/>
+            <!-- Brillo suave en la parte iluminada -->
+            <circle cx="38" cy="34" r="14" fill="white" fill-opacity="0.12"/>
+        </svg>
         <div id="estrellasContainer"></div>
         <!-- Los meteoritos se generarán aquí dinámicamente -->
     </div>
@@ -1396,75 +1419,61 @@
                 const minuto = ahora.getMinutes();
                 const segundo = ahora.getSeconds();
                 
-                // Calcular el porcentaje del día (0 = medianoche, 0.5 = mediodía, 1 = medianoche siguiente)
                 const totalSegundos = hora * 3600 + minuto * 60 + segundo;
-                const porcentajeDia = totalSegundos / 86400; // 86400 segundos en un día
+                const porcentajeDia = totalSegundos / 86400;
                 
-                // Calcular posición del sol (8:00 AM a 6:00 PM)
-                const amanecer = 8; // 8:00 AM
-                const atardecer = 18; // 6:00 PM
+                const amanecer = 8;
+                const atardecer = 18;
                 
                 const sol = document.getElementById('sol');
                 const luna = document.getElementById('luna');
                 const estrellas = document.getElementById('estrellasContainer');
                 
-                // Determinar si es de día o de noche
                 const esDia = hora >= amanecer && hora < atardecer;
                 
+                // Tamaño fijo para sol y luna, sin margin negativo
+                const tamanoSol = 110;
+                const tamanoLuna = 100;
+                
                 if (esDia) {
-                    // ES DE DÍA
+                    // --- SOL ---
                     const duracionDia = atardecer - amanecer;
-                    const horaActualDia = hora + minuto/60 - amanecer;
-                    const progresoDia = horaActualDia / duracionDia;
+                    const horaActualDia = hora + minuto / 60 - amanecer;
+                    const progresoDia = horaActualDia / duracionDia; // 0 (amanecer) → 1 (atardecer)
                     
-                    // Posición del sol en el cielo (arco) - AJUSTADO MÁS BAJO
-                    const angulo = progresoDia * Math.PI; // 0 a π radianes
+                    // Arco del sol: de izquierda (5%) → centro (50%) → derecha (95%)
+                    // Altura: sube desde 25% en los extremos hasta 5% en el centro (mediodía)
+                    const angulo = progresoDia * Math.PI; // 0 → π
+                    const xSol = 5 + progresoDia * 90; // 5% → 95% del ancho
+                    const ySol = 25 - Math.sin(angulo) * 20; // 25% en extremos, ~5% al mediodía
                     
-                    // Coordenadas para el arco del sol - AJUSTADO MÁS BAJO (de 15% a 60% de altura)
-                    const x = 50 + Math.sin(angulo) * 35; // 15% a 85% del ancho
-                    const y = 30 + Math.cos(angulo) * 25; // AJUSTADO: 30% a 55% de la altura (más bajo)
-                    
-                    // Estilo del sol
-                    sol.style.left = x + '%';
-                    sol.style.top = y + '%';
-                    
-                    // Tamaño y opacidad del sol según la hora
-                    let tamanoSol = 150;
-                    let opacidadSol = 0.9;
-                    let brilloSol = 0.7;
-                    
-                    if (hora < amanecer + 1 || hora > atardecer - 1) {
-                        // Amanecer o atardecer
-                        tamanoSol = 180;
-                        opacidadSol = 0.6;
-                        brilloSol = 0.5;
-                        sol.style.background = 'radial-gradient(circle, #ff9800 0%, #ff5722 70%, #d84315 100%)';
-                    } else if (hora >= 11 && hora <= 13) {
-                        // Mediodía
-                        tamanoSol = 130;
-                        opacidadSol = 1;
-                        brilloSol = 0.9;
-                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ffc107 70%, #ff9800 100%)';
-                    } else {
-                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, #ff5722 100%)';
-                    }
-                    
+                    sol.style.left = xSol + '%';
+                    sol.style.top = ySol + '%';
                     sol.style.width = tamanoSol + 'px';
                     sol.style.height = tamanoSol + 'px';
-                    sol.style.margin = '-' + (tamanoSol/2) + 'px 0 0 -' + (tamanoSol/2) + 'px';
-                    sol.style.opacity = opacidadSol;
-                    sol.style.boxShadow = '0 0 ' + (tamanoSol/2) + 'px rgba(255, 235, 59, ' + brilloSol + '), 0 0 ' + (tamanoSol*1.5) + 'px rgba(255, 152, 0, 0.4)';
+                    sol.style.margin = '0';
+                    sol.style.transform = 'translate(-50%, -50%)';
                     
-                    // Mostrar sol, ocultar luna y estrellas
+                    // Color según la hora
+                    if (hora < amanecer + 1 || hora >= atardecer - 1) {
+                        sol.style.background = 'radial-gradient(circle, #ff9800 0%, #ff5722 70%, #d84315 100%)';
+                        sol.style.opacity = '0.75';
+                    } else if (hora >= 11 && hora <= 13) {
+                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ffc107 70%, #ff9800 100%)';
+                        sol.style.opacity = '1';
+                    } else {
+                        sol.style.background = 'radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, #ff5722 100%)';
+                        sol.style.opacity = '0.9';
+                    }
+                    sol.style.boxShadow = '0 0 55px rgba(255,235,59,0.7), 0 0 140px rgba(255,152,0,0.4)';
+                    
                     sol.style.display = 'block';
                     luna.style.display = 'none';
                     estrellas.style.opacity = 0;
                     
                 } else {
-                    // ES DE NOCHE
-                    let duracionNoche;
-                    let horaActualNoche;
-                    
+                    // --- LUNA ---
+                    let duracionNoche, horaActualNoche;
                     if (hora < amanecer) {
                         duracionNoche = amanecer + (24 - atardecer);
                         horaActualNoche = hora + 24 - atardecer;
@@ -1473,67 +1482,46 @@
                         horaActualNoche = hora - atardecer;
                     }
                     
-                    const progresoNoche = horaActualNoche / duracionNoche;
+                    const progresoNoche = horaActualNoche / duracionNoche; // 0 → 1
+                    
+                    // Arco de la luna: de izquierda → centro → derecha, igual que el sol pero de noche
                     const angulo = progresoNoche * Math.PI;
+                    const xLuna = 5 + progresoNoche * 90; // 5% → 95%
+                    const yLuna = 25 - Math.sin(angulo) * 18; // 25% en extremos, ~7% en el centro
                     
-                    // Coordenadas para el arco de la luna - MANTENIDO IGUAL
-                    const x = 50 + Math.sin(angulo) * 40;
-                    const y = 10 + Math.cos(angulo) * 40; // 10% a 50% de la altura
-                    
-                    // Estilo de la luna
-                    luna.style.left = x + '%';
-                    luna.style.top = y + '%';
-                    
-                    // Tamaño y opacidad de la luna según la hora
-                    const tamanoLuna = 120;
-                    const opacidadLuna = 0.8 - Math.abs(12 - hora) * 0.05;
-                    const brilloLuna = 0.6 - Math.abs(12 - hora) * 0.05;
-                    
+                    luna.style.left = xLuna + '%';
+                    luna.style.top = yLuna + '%';
                     luna.style.width = tamanoLuna + 'px';
                     luna.style.height = tamanoLuna + 'px';
-                    luna.style.margin = '-' + (tamanoLuna/2) + 'px 0 0 -' + (tamanoLuna/2) + 'px';
-                    luna.style.opacity = Math.max(0.3, opacidadLuna);
-                    luna.style.boxShadow = '0 0 ' + (tamanoLuna/2) + 'px rgba(224, 247, 250, ' + brilloLuna + '), 0 0 ' + (tamanoLuna*1.5) + 'px rgba(178, 235, 242, 0.3)';
+                    luna.style.margin = '0';
+                    luna.style.transform = 'translate(-50%, -50%)';
+                    luna.style.opacity = Math.max(0.5, 0.85 - Math.abs(12 - hora) * 0.03);
+                    luna.style.boxShadow = '';  // el drop-shadow lo da el CSS con filter
                     
-                    // Mostrar luna y estrellas, ocultar sol
                     sol.style.display = 'none';
                     luna.style.display = 'block';
                     
-                    // Estrellas - más visibles cuanto más tarde/antes sea
                     const opacidadEstrellas = 0.1 + Math.abs(0 - hora) * 0.03;
                     estrellas.style.opacity = Math.min(0.8, opacidadEstrellas);
                 }
                 
-                // Actualizar fondo del body según la hora
+                // Fondo del cielo según la hora
                 let colorInicio, colorFin;
-                
-                if (hora >= amanecer - 1 && hora < amanecer + 1) {  // 7:00-9:00
-                    // Amanecer
-                    colorInicio = '#1a2980';
-                    colorFin = '#26d0ce';
-                } else if (hora >= amanecer && hora < atardecer - 2) {  // 8:00-16:00
-                    // Día
-                    colorInicio = '#87CEEB';
-                    colorFin = '#E0F7FA';
-                } else if (hora >= atardecer - 2 && hora < atardecer + 1) {  // 16:00-19:00
-                    // Atardecer
-                    colorInicio = '#FF9800';
-                    colorFin = '#1a2980';
+                if (hora >= amanecer - 1 && hora < amanecer + 1) {
+                    colorInicio = '#1a2980'; colorFin = '#26d0ce';
+                } else if (hora >= amanecer && hora < atardecer - 2) {
+                    colorInicio = '#87CEEB'; colorFin = '#E0F7FA';
+                } else if (hora >= atardecer - 2 && hora < atardecer + 1) {
+                    colorInicio = '#FF9800'; colorFin = '#1a2980';
                 } else {
-                    // Noche
-                    colorInicio = '#0A192F';
-                    colorFin = '#1a2980';
+                    colorInicio = '#0A192F'; colorFin = '#1a2980';
                 }
-                
                 document.body.style.background = `linear-gradient(to bottom, ${colorInicio}, ${colorFin})`;
                 
-                // Controlar flor/meteoritos según sea de día o noche
                 if (esDia) {
-                    // De día: activar flores, desactivar meteoritos
                     controlarFlores(true);
                     controlarMeteoritos(false);
                 } else {
-                    // De noche: activar meteoritos, desactivar flores
                     controlarFlores(false);
                     controlarMeteoritos(true);
                 }
